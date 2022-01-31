@@ -75,13 +75,13 @@ public class FrmTarea extends JFrame implements ActionListener {
 		
 		JPanel panelCampos = new JPanel(new GridLayout(0, 2, 10, 10));
 		
-		LblTitulo = new JLabel("Título");
+		LblTitulo = new JLabel("Titulo");
 		panelCampos.add(LblTitulo);
 		
 		TxtTitulo = new JTextField("", 20);
 		panelCampos.add(TxtTitulo);
 		
-		LblDescripcion = new JLabel("Descripción");
+		LblDescripcion = new JLabel("Descripcion");
 		panelCampos.add(LblDescripcion);
 		
 		TxtDescripcion = new JTextArea();
@@ -125,7 +125,7 @@ public class FrmTarea extends JFrame implements ActionListener {
 					servicio.modificar(t);
 				}
 				frm.CargarTabla();
-				JOptionPane.showMessageDialog(this, "La tarea se guardó correctamente", "Tarea",
+				JOptionPane.showMessageDialog(this, "La tarea se guardo correctamente", "Tarea",
 				        JOptionPane.INFORMATION_MESSAGE);
 				this.setVisible(false);
 				dispose();

@@ -18,7 +18,7 @@ public class TareaTableModel extends AbstractTableModel {
 	
 	
 	// NOMBRES DE LOS ENCABEZADOS
-	private String[] nombresColumnas = {"Id","Título", "Descripción", "Horas Estimadas", "Horas Reales"};
+	private String[] nombresColumnas = {"Id","Titulo", "Descripcion", "Horas Estimadas", "Horas Reales"};
 	
 	//TIPOS DE CADA COLUMNA (EN EL MISMO ORDEN DE LOS ENCABEZADOS)
 	private Class[] tiposColumnas = {Integer.class, String.class, String.class, Integer.class, Integer.class};
