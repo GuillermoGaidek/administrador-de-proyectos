@@ -6,7 +6,7 @@ import java.sql.SQLException;
 public class DBManager {
 
 	private static final String DB_DRIVER = "org.h2.Driver";
-	private static final String DB_NAME = "/DB";
+	private static final String DB_NAME = "\\DB";
 	private static final String DB_USERNAME = "sa";
 	private static final String DB_PASSWORD = "";
 
@@ -19,7 +19,7 @@ public class DBManager {
 			System.exit(0);
 		}
 		try {
-			String url = "jdbc:h2:/home/guillermo.gaidek/labo-1/database/db";
+			String url = "jdbc:h2:C:\\Users\\GG-Asus\\Desktop\\Cosas\\Code Projects\\labo-1\\database\\db";
 			c = DriverManager.getConnection(url, "sa", "");
 			c.setAutoCommit(false);
 		} catch (SQLException e) {
