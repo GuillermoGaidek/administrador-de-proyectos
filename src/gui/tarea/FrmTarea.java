@@ -113,7 +113,10 @@ public class FrmTarea extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == BtnGuardar) {
+		if(TxtTitulo.getText().isEmpty() || TxtDescripcion.getText().isEmpty() || TxtHorasEstimadas.getText().isEmpty() || TxtHorasReales.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacios. Vuelva a intentar nuevamente", "Tarea",
+			        JOptionPane.ERROR_MESSAGE);
+		} else {
 			try {
 				Tarea t = new Tarea();
 				t.setTitulo(TxtTitulo.getText());
@@ -127,14 +130,19 @@ public class FrmTarea extends JFrame implements ActionListener {
 					servicio.modificar(t);
 				}
 				frm.CargarTabla();
-				JOptionPane.showMessageDialog(this, "La tarea se guardo correctamente", "Tarea",
-				        JOptionPane.INFORMATION_MESSAGE);
 				this.setVisible(false);
 				dispose();
 			} catch (ServicioException ex) {
+				JOptionPane.showMessageDialog(this, "Algo salio mal al guardar los datos. Vuelva a intentar nuevamente", "Tarea",
+				        JOptionPane.ERROR_MESSAGE);
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(this, "Las horas deben ser numeros. Vuelva a intentar nuevamente", "Tarea",
+				        JOptionPane.ERROR_MESSAGE);
+			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(this, "Algo salio mal. Vuelva a intentar nuevamente", "Tarea",
 				        JOptionPane.ERROR_MESSAGE);
 			}
-		} 
+		}
+		
 	}
 }
