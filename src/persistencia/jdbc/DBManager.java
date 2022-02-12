@@ -19,7 +19,7 @@ public class DBManager {
 			System.exit(0);
 		}
 		try {
-			String url = "jdbc:h2:C:\\Users\\GG-Asus\\Desktop\\Cosas\\Code Projects\\labo-1\\database\\db";
+			String url = "jdbc:h2:C:\\Users\\GG-Asus\\Desktop\\Cosas\\Code Projects\\administrador-de-proyectos\\database\\db";
 			c = DriverManager.getConnection(url, "sa", "");
 			c.setAutoCommit(false);
 		} catch (SQLException e) {
