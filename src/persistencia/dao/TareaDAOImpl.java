@@ -1,4 +1,4 @@
-package dao;
+package persistencia.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -7,9 +7,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import exceptions.DAOException;
-import jdbc.DBManager;
-import model.Tarea;
+import logica.excepciones.DAOException;
+import logica.model.Tarea;
+import persistencia.jdbc.DBManager;
 
 public class TareaDAOImpl implements TareaDAO {
 	@Override

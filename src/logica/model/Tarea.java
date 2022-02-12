@@ -1,4 +1,4 @@
-package model;
+package logica.model;
 
 public class Tarea {
 	private int id;

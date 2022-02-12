@@ -1,4 +1,4 @@
-package gui;
+package gui.tarea;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -9,16 +9,17 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
-import model.Tarea;
-import service.TareaService;
+import logica.model.Tarea;
+import logica.service.TareaService;
 
 public class FrmListadoTareas extends JFrame implements ActionListener {
-	TareaService servicio;
+	private TareaService servicio;
 	private JTable tabla;
 	private TareaTableModel modelo;
 	private JScrollPane scrollPaneParaTabla;
@@ -26,11 +27,12 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 	private JButton botonAgregar;
 	private JButton botonBorrar;
 	private JButton botonModificar;
+	boolean llenar = true;
 	
 	public FrmListadoTareas() {
 		servicio = new TareaService();
 		
-		// setear titulo ventana
+		// setea titulo ventana
 		this.setTitle("Tarea");
 
 		// se cierra la ventana al hacer click en el boton X
@@ -48,34 +50,36 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 	}
 	
 	private JPanel GetPanelPrincipal() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
+		JPanel panel = new JPanel(new BorderLayout());
+		
 		LblTitulo = new JLabel("Listado de tareas", SwingConstants.CENTER);
 		panel.add(LblTitulo, BorderLayout.NORTH);
+		
 		modelo = new TareaTableModel();
 		tabla = new JTable(modelo);
 		CargarTabla();
 		scrollPaneParaTabla = new JScrollPane(tabla);
 		panel.add(scrollPaneParaTabla, BorderLayout.CENTER);
+		
 		panel.add(GetPanelBotones(), BorderLayout.SOUTH);
+		
 		return panel;
 	}
 	
 	private JPanel GetPanelBotones() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout());
+		JPanel panel = new JPanel(new FlowLayout());
 
 		botonAgregar = new JButton("Agregar");
 		botonAgregar.addActionListener(this);
 		panel.add(botonAgregar);
 
-		botonBorrar = new JButton("Borrar");
-		botonBorrar.addActionListener(this);
-		panel.add(botonBorrar);
-		
 		botonModificar = new JButton("Modificar");
 		botonModificar.addActionListener(this);
 		panel.add(botonModificar);
+		
+		botonBorrar = new JButton("Borrar");
+		botonBorrar.addActionListener(this);
+		panel.add(botonBorrar);
 		
 		return panel;
 	}
@@ -86,20 +90,30 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 		modelo.fireTableDataChanged();		
 	}
 
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e){
 		if (e.getSource() == botonAgregar) {
-			new FrmTarea(-1, this);
+			new FrmTarea(-1, this, !llenar);
 		} else if (e.getSource() == botonModificar) {
-			int fila = this.tabla.getSelectedRow();
-			int id = (int)this.tabla.getValueAt(fila, 0);
-			new FrmTarea(id, this);
+			if(this.tabla.getSelectedRow() != -1) {
+				int fila = this.tabla.getSelectedRow();
+				int id = (int)this.tabla.getValueAt(fila, 0);
+				new FrmTarea(id, this, llenar);	
+			} else {
+				JOptionPane.showMessageDialog(this, "No selecciono ninguna tarea",
+												"Modificar",JOptionPane.ERROR_MESSAGE);
+			}	
 		} else if (e.getSource() == botonBorrar) {
-			int fila = this.tabla.getSelectedRow();
-			int id = (int)this.tabla.getValueAt(fila, 0);
-			Tarea t = new Tarea();
-			t.setId(id);
-			servicio.borrar(t);
-			CargarTabla();			
+			if(this.tabla.getSelectedRow() != -1) {
+				int fila = this.tabla.getSelectedRow();
+				int id = (int)this.tabla.getValueAt(fila, 0);
+				Tarea t = new Tarea();
+				t.setId(id);
+				servicio.borrar(t);
+				CargarTabla();		
+			}else{
+				JOptionPane.showMessageDialog(this, "No selecciono ninguna tarea", "Borrar",
+				        JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package gui;
+package gui.tarea;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -14,12 +14,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import exceptions.ServicioException;
-import model.Tarea;
-import service.TareaService;
+import logica.excepciones.ServicioException;
+import logica.model.Tarea;
+import logica.service.TareaService;
 
 public class FrmTarea extends JFrame implements ActionListener {
-	TareaService servicio;
+	private TareaService servicio;
 	private JLabel LblTituloVentana;
 	private JLabel LblTitulo;
 	private JLabel LblDescripcion;
@@ -31,12 +31,14 @@ public class FrmTarea extends JFrame implements ActionListener {
 	private JTextField TxtHorasReales;
 	private JButton BtnGuardar;
 	private FrmListadoTareas frm;
+	private boolean llenar;
 	private int id;
 	
-	public FrmTarea(int id, FrmListadoTareas frm) {
+	public FrmTarea(int id, FrmListadoTareas frm, boolean llenar) {
 		servicio = new TareaService();
 		this.id = id;
 		this.frm = frm;
+		this.llenar = llenar;
 		
 		// setea titulo ventana
 		this.setTitle("Tarea");
@@ -53,7 +55,7 @@ public class FrmTarea extends JFrame implements ActionListener {
 		// muestra la ventana
 		this.setVisible(true);
 
-		if(id != -1) {
+		if(llenar) {
 			LlenarForm();
 		}
 	}

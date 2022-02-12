@@ -1,4 +1,6 @@
-package gui;
+package logica.main;
+
+import gui.tarea.FrmListadoTareas;
 
 public class Main {
 

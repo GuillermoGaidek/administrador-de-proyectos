@@ -1,9 +1,9 @@
-package dao;
+package persistencia.dao;
 
 import java.util.List;
 
-import exceptions.DAOException;
-import model.Tarea;
+import logica.excepciones.DAOException;
+import logica.model.Tarea;
 
 public interface TareaDAO {
     public void crear(Tarea a) throws DAOException;

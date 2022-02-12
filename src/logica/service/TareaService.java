@@ -1,11 +1,11 @@
-package service;
+package logica.service;
 
 import java.util.List;
 
-import dao.TareaDAOImpl;
-import exceptions.DAOException;
-import exceptions.ServicioException;
-import model.Tarea;
+import logica.excepciones.DAOException;
+import logica.excepciones.ServicioException;
+import logica.model.Tarea;
+import persistencia.dao.TareaDAOImpl;
 
 public class TareaService {
 	TareaDAOImpl dao;

@@ -1,4 +1,4 @@
-package exceptions;
+package logica.excepciones;
 
 public class ServicioException extends Exception {
 
