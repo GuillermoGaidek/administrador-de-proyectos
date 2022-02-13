@@ -11,7 +11,8 @@ import logica.excepciones.DAOException;
 import logica.model.Tarea;
 import persistencia.jdbc.DBManager;
 
-public class TareaDAOImpl implements TareaDAO {
+public class TareaDAOH2Impl implements DAO<Tarea> {
+	
 	@Override
 	public void crear(Tarea t) throws DAOException {
 		String sql = "INSERT INTO TAREAS (TITULO,DESCRIPCION,HORASESTIMADAS,HORASREALES) VALUES " +
@@ -23,16 +24,16 @@ public class TareaDAOImpl implements TareaDAO {
 			c.commit();
 		} catch (SQLException e) {
 			try {
-				e.printStackTrace();
 				c.rollback();
+				throw new DAOException("Error al guardar en la BD, rollback realizado", e);
 			} catch (SQLException e1) {
-				throw new DAOException(e);
+				throw new DAOException("Error al guardar en la BD y rollback no realizado", e1);
 			}
 		} finally {
 			try {
-				c.close();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
+				DBManager.close();
+			} catch (SQLException e) {
+				throw new DAOException("Error al cerrar la conexion de la BD", e);
 			}
 		}
 	}
@@ -47,16 +48,16 @@ public class TareaDAOImpl implements TareaDAO {
 			c.commit();
 		} catch (SQLException e) {
 			try {
-				e.printStackTrace();
 				c.rollback();
+				throw new DAOException("Error al borrar registro de la BD, rollback realizado", e);
 			} catch (SQLException e1) {
-				throw new DAOException(e);
+				throw new DAOException("Error al borrar de la BD y rollback no realizado", e1);
 			}
 		} finally {
 			try {
-				c.close();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
+				DBManager.close();
+			} catch (SQLException e) {
+				throw new DAOException("Error al cerrar la conexion de la BD", e);
 			}
 		}
 	}
@@ -73,16 +74,16 @@ public class TareaDAOImpl implements TareaDAO {
 			c.commit();
 		} catch (SQLException e) {
 			try {
-				e.printStackTrace();
 				c.rollback();
+				throw new DAOException("Error al modificar registro de la BD, rollback realizado", e);
 			} catch (SQLException e1) {
-				throw new DAOException(e);
+				throw new DAOException("Error al modificar registro de la BD, rollback no realizado", e1);
 			}
 		} finally {
 			try {
-				c.close();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
+				DBManager.close();
+			} catch (SQLException e) {
+				throw new DAOException("Error al cerrar la conexion de la BD", e);
 			}
 		}
 		
@@ -105,14 +106,15 @@ public class TareaDAOImpl implements TareaDAO {
 		} catch (SQLException e) {
 			try {
 				c.rollback();
+				throw new DAOException("Error al obtener lista de tareas de la BD, rollback realizado", e);
 			} catch (SQLException e1) {
-				e1.printStackTrace();
+				throw new DAOException("Error al obtener lista de tareas de la BD, rollback no realizado", e1);
 			}
 		} finally {
 			try {
-				c.close();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
+				DBManager.close();
+			} catch (SQLException e) {
+				throw new DAOException("Error al cerrar la conexion de la BD", e);
 			}
 		}
 		return lista;
@@ -135,15 +137,15 @@ public class TareaDAOImpl implements TareaDAO {
 		} catch (SQLException e) {
 			try {
 				c.rollback();
-				e.printStackTrace();
+				throw new DAOException("Error al obtener tarea de la BD, rollback realizado", e);
 			} catch (SQLException e1) {
-				e1.printStackTrace();
+				throw new DAOException("Error al obtener tarea de la BD, rollback no realizado", e1);
 			}
 		} finally {
 			try {
-				c.close();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
+				DBManager.close();
+			} catch (SQLException e) {
+				throw new DAOException("Error al cerrar la conexion de la BD", e);
 			}
 		}
 		return resultado;

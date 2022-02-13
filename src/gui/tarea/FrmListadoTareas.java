@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
+import logica.excepciones.ServicioException;
 import logica.model.Tarea;
 import logica.service.TareaService;
 
@@ -85,9 +86,15 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 	}
 	
 	public  void CargarTabla() {
-		List<Tarea> lista = servicio.listar();
-		modelo.setFilas(lista);
-		modelo.fireTableDataChanged();		
+		List<Tarea> lista;
+		try {
+			lista = servicio.listar();
+			modelo.setFilas(lista);
+			modelo.fireTableDataChanged();	
+		} catch (ServicioException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage(),
+					"Modificar",JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	public void actionPerformed(ActionEvent e){
@@ -103,16 +110,21 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 												"Modificar",JOptionPane.ERROR_MESSAGE);
 			}	
 		} else if (e.getSource() == botonBorrar) {
-			if(this.tabla.getSelectedRow() != -1) {
-				int fila = this.tabla.getSelectedRow();
-				int id = (int)this.tabla.getValueAt(fila, 0);
-				Tarea t = new Tarea();
-				t.setId(id);
-				servicio.borrar(t);
-				CargarTabla();		
-			}else{
-				JOptionPane.showMessageDialog(this, "No selecciono ninguna tarea", "Borrar",
-				        JOptionPane.ERROR_MESSAGE);
+			try {
+				if(this.tabla.getSelectedRow() != -1) {
+					int fila = this.tabla.getSelectedRow();
+					int id = (int)this.tabla.getValueAt(fila, 0);
+					Tarea t = new Tarea();
+					t.setId(id);
+					servicio.borrar(t);
+					CargarTabla();		
+				} else {
+					JOptionPane.showMessageDialog(this, "No selecciono ninguna tarea", "Borrar",
+					        JOptionPane.ERROR_MESSAGE);
+				}
+			}catch(ServicioException ex) {
+				JOptionPane.showMessageDialog(this, ex.getMessage(),
+						"Borrar",JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

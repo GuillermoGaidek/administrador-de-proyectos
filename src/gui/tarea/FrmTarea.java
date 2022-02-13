@@ -60,12 +60,17 @@ public class FrmTarea extends JFrame implements ActionListener {
 		}
 	}
 	
-	private void LlenarForm() {		
-		Tarea t = servicio.getTarea(id);
-		TxtTitulo.setText(t.getTitulo());
-		TxtDescripcion.setText(t.getDescripcion());
-		TxtHorasEstimadas.setText(String.valueOf(t.getHorasEstimadas()));
-		TxtHorasReales.setText(String.valueOf(t.getHorasReales()));
+	private void LlenarForm() {
+		try {
+			Tarea t = servicio.getTarea(id);
+			TxtTitulo.setText(t.getTitulo());
+			TxtDescripcion.setText(t.getDescripcion());
+			TxtHorasEstimadas.setText(String.valueOf(t.getHorasEstimadas()));
+			TxtHorasReales.setText(String.valueOf(t.getHorasReales()));
+		} catch (ServicioException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage(), "Tarea",
+			        JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	private JPanel GetPanelPrincipal() {
@@ -133,13 +138,13 @@ public class FrmTarea extends JFrame implements ActionListener {
 				this.setVisible(false);
 				dispose();
 			} catch (ServicioException ex) {
-				JOptionPane.showMessageDialog(this, "Algo salio mal al guardar los datos. Vuelva a intentar nuevamente", "Tarea",
+				JOptionPane.showMessageDialog(this, ex.getMessage(), "Tarea",
 				        JOptionPane.ERROR_MESSAGE);
 			} catch (NumberFormatException ex) {
 				JOptionPane.showMessageDialog(this, "Las horas deben ser numeros. Vuelva a intentar nuevamente", "Tarea",
 				        JOptionPane.ERROR_MESSAGE);
 			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(this, "Algo salio mal. Vuelva a intentar nuevamente", "Tarea",
+				JOptionPane.showMessageDialog(this, "Algo salio mal: " + ex.getMessage(), "Tarea",
 				        JOptionPane.ERROR_MESSAGE);
 			}
 		}
