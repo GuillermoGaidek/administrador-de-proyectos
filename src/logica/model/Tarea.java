@@ -1,16 +1,24 @@
 package logica.model;
 
+import logica.excepciones.EmpleadoNoDisponibleException;
+import logica.model.estados.Estado;
+
 public class Tarea {
 	private int id;
 	private String titulo;
 	private String descripcion;
 	private int horasEstimadas;
 	private int horasReales;
+	private Empleado empleado;
+	private Estado estado;
 	
 	public Tarea() {
 	}
 	
-	public Tarea(int id, String titulo, String descripcion, int horasEstimadas, int horasReales) {
+	public Tarea(int id, String titulo, String descripcion, int horasEstimadas,int horasReales,
+				 Empleado empleado,Estado estado) throws EmpleadoNoDisponibleException {
+		asignarEmpleado(empleado);
+		this.estado = estado;
 		this.id = id;
 		this.titulo = titulo;
 		this.descripcion = descripcion;
@@ -18,9 +26,26 @@ public class Tarea {
 		this.horasReales = horasReales;
 	}
 
+	public void asignarEmpleado(Empleado empleado) throws EmpleadoNoDisponibleException {
+		if (!empleado.estaLibre()) throw new EmpleadoNoDisponibleException("El empleado ya esta ocupado");
+		this.empleado = empleado;
+		this.empleado.pasarAOcupado();
+	}
+	
+	public Empleado getEmpleado() {
+		return this.empleado;
+	}
 
+	public Estado cambiarEstadoA(Estado nuevoEstado) {
+		return nuevoEstado;
+	}
+	
+	public Estado getEstado() {
+		return this.estado;
+	}
+	
 	public int getId() {
-		return id;
+		return this.id;
 	}
 
 	public void setId(int id) {
@@ -28,7 +53,7 @@ public class Tarea {
 	}
 
 	public String getTitulo() {
-		return titulo;
+		return this.titulo;
 	}
 
 	public void setTitulo(String titulo) {
@@ -36,7 +61,7 @@ public class Tarea {
 	}
 
 	public String getDescripcion() {
-		return descripcion;
+		return this.descripcion;
 	}
 
 	public void setDescripcion(String descripcion) {
@@ -44,7 +69,7 @@ public class Tarea {
 	}
 
 	public int getHorasEstimadas() {
-		return horasEstimadas;
+		return this.horasEstimadas;
 	}
 
 	public void setHorasEstimadas(int horasEstimadas) {
@@ -52,11 +77,18 @@ public class Tarea {
 	}
 
 	public int getHorasReales() {
-		return horasReales;
+		return this.horasReales;
 	}
 
 	public void setHorasReales(int horasReales) {
 		this.horasReales = horasReales;
+	}
+
+	@Override
+	public String toString() {
+		return "Tarea [id=" + id + ", titulo=" + titulo + ", descripcion=" + descripcion + ", horasEstimadas="
+				+ horasEstimadas + ", horasReales=" + horasReales + ", empleado=" + empleado + ", estado=" + estado
+				+ "]";
 	}
 
 }
