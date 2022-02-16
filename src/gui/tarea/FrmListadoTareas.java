@@ -5,7 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,13 +13,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
-
 import logica.excepciones.ServicioException;
+import logica.model.Estado;
 import logica.model.Tarea;
-import logica.service.TareaService;
+import logica.service.GenericService;
+import persistencia.dao.EstadoDAOH2Impl;
+import persistencia.dao.TareaDAOH2Impl;
 
 public class FrmListadoTareas extends JFrame implements ActionListener {
-	private TareaService servicio;
+	GenericService<Tarea> tareaService = new GenericService<Tarea>(new TareaDAOH2Impl());
 	private JTable tabla;
 	private TareaTableModel modelo;
 	private JScrollPane scrollPaneParaTabla;
@@ -31,7 +32,6 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 	boolean llenar = true;
 	
 	public FrmListadoTareas() {
-		servicio = new TareaService();
 		
 		// setea titulo ventana
 		this.setTitle("Tarea");
@@ -88,7 +88,7 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 	public  void CargarTabla() {
 		List<Tarea> lista;
 		try {
-			lista = servicio.listar();
+			lista = tareaService.listar();
 			modelo.setFilas(lista);
 			modelo.fireTableDataChanged();	
 		} catch (ServicioException ex) {
@@ -116,7 +116,7 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 					int id = (int)this.tabla.getValueAt(fila, 0);
 					Tarea t = new Tarea();
 					t.setId(id);
-					servicio.borrar(t);
+					tareaService.borrar(t);
 					CargarTabla();		
 				} else {
 					JOptionPane.showMessageDialog(this, "No selecciono ninguna tarea", "Borrar",

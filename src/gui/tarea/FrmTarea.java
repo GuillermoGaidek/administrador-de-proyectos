@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,13 +12,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import logica.excepciones.ServicioException;
 import logica.model.Tarea;
-import logica.service.TareaService;
+import logica.service.GenericService;
+import persistencia.dao.TareaDAOH2Impl;
 
 public class FrmTarea extends JFrame implements ActionListener {
-	private TareaService tareaService;
+	GenericService<Tarea> tareaService = new GenericService<Tarea>(new TareaDAOH2Impl());
 	private JLabel LblTituloVentana;
 	private JLabel LblTitulo;
 	private JLabel LblDescripcion;
@@ -35,7 +34,7 @@ public class FrmTarea extends JFrame implements ActionListener {
 	private int id;
 	
 	public FrmTarea(int id, FrmListadoTareas frm, boolean llenar) {
-		tareaService = new TareaService();
+
 		this.id = id;
 		this.frm = frm;
 		this.llenar = llenar;
