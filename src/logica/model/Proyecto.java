@@ -13,12 +13,9 @@ public class Proyecto {
 		
 	}
 
-	public Proyecto(int id,String titulo,List<Empleado> empleados,List<Tarea> tareas) {
+	public Proyecto(int id,String titulo) {
 		this.id = id;
 		this.titulo = titulo;
-		this.empleados = empleados;
-		this.tareas = tareas;
-		
 	}
 	
 	public void agregarTarea(Tarea t) {

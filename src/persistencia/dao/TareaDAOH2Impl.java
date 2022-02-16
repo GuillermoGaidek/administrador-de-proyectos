@@ -6,26 +6,27 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import logica.excepciones.DAOException;
+import logica.excepciones.EmpleadoNoDisponibleException;
+import logica.excepciones.ServicioException;
 import logica.model.Empleado;
+import logica.model.Estado;
 import logica.model.Tarea;
-import logica.model.estados.Estado;
 import logica.service.GenericService;
 import persistencia.jdbc.DBManager;
 
 public class TareaDAOH2Impl implements DAO<Tarea> {
 	
 	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
-	GenericService<Estado> estadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
+	GenericService<Estado> estadoService = new GenericService<Estado>(new EstadoDAOH2Impl());
 	
 	
 	@Override
 	public void crear(Tarea t) throws DAOException {
 		
-		String sql = "INSERT INTO TAREA (TITULO,DESCRIPCION,HORAS_ESTIMADAS,HORAS_REALES,ID_EMPLEADO,ID_ESTADO) VALUES " +
+		String sql = "INSERT INTO TAREA (TITULO,DESCRIPCION,HORAS_ESTIMADAS,HORAS_REALES,ID_EMPLEADO,ID_ESTADO,ID_PROYECTO) VALUES " +
 		"('" + t.getTitulo() + "', '" + t.getDescripcion() + "', " + t.getHorasEstimadas() + ", " + t.getHorasReales() +
-		t.getEmpleado().getDni() + "," + t.getEstado().getId() + ")";
+		t.getEmpleado().getDni() + "," + t.getEstado().getId() + "," + t.getProyecto().getId() + ")";
 		
 		Connection c = DBManager.connect();
 		
@@ -76,11 +77,10 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 	@Override
 	public void modificar(Tarea t) throws DAOException {
 		
-		String sql = "UPDATE TAREA SET " +
-		"TITULO='" + t.getTitulo() + "',DESCRIPCION='" + t.getDescripcion() + 
-		"',HORAS_ESTIMADAS=" + t.getHorasEstimadas() + ",HORAS_REALES=" + t.getHorasReales() + 
-		",ID_EMPLEADO=" + t.getEmpleado().getDni() + ",ID_ESTADO=" + t.getEstado().getId() +
-		" WHERE ID=" + t.getId();
+		String sql = "UPDATE TAREA SET " + "TITULO='" + t.getTitulo() + "',DESCRIPCION='" + t.getDescripcion() + 
+						"',HORAS_ESTIMADAS=" + t.getHorasEstimadas() + ",HORAS_REALES=" + t.getHorasReales() + 
+						",ID_EMPLEADO=" + t.getEmpleado().getDni() + ",ID_ESTADO=" + t.getEstado().getId() +
+						" WHERE ID=" + t.getId();
 		
 		Connection c = DBManager.connect();
 		try {
@@ -115,8 +115,14 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 
 			while (rs.next()) {
 				
-				Tarea a = new Tarea(rs.getInt("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), rs.getInt("HORAS_ESTIMADAS"),
-						rs.getInt("HORAS_REALES"),rs);
+				Empleado empleado = empleadoService.getById(rs.getLong("ID_EMPLEADO"));
+				empleado.setLibre(true);
+				
+				Estado estado = estadoService.getById(rs.getLong("ID"));
+				
+				Tarea a = new Tarea(rs.getInt("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), 
+									rs.getInt("HORAS_ESTIMADAS"),rs.getInt("HORAS_REALES"),
+									empleado,estado);
 				lista.add(a);
 			}
 		} catch (SQLException e) {
@@ -126,6 +132,10 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 			} catch (SQLException e1) {
 				throw new DAOException("Error al obtener lista de tareas de la BD, rollback no realizado", e1);
 			}
+		} catch (ServicioException se) {
+			throw new DAOException("Error en el servicio al obtener lista de Tareas de la BD", se);
+		} catch (EmpleadoNoDisponibleException se) {
+			throw new DAOException("Error al obtener lista de Tareas de la BD", se);
 		} finally {
 			try {
 				DBManager.close();
@@ -137,8 +147,8 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 	}
 
 	@Override
-	public Tarea getById(int id) throws DAOException {
-		Tarea resultado = new Tarea();
+	public Tarea getById(long id) throws DAOException {
+		Tarea tarea = new Tarea();
 		String sql = "SELECT * FROM TAREA WHERE ID=" + id;
 		Connection c = DBManager.connect();
 		try {
@@ -146,8 +156,15 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 			ResultSet rs = s.executeQuery(sql);
 
 			if (rs.next()) {
-				resultado = new Tarea(rs.getInt("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), rs.getInt("HORAS_ESTIMADAS"),
-						rs.getInt("HORAS_REALES"));
+				
+				Empleado empleado = empleadoService.getById(rs.getLong("ID_EMPLEADO"));
+				empleado.setLibre(true);
+				
+				Estado estado = estadoService.getById(rs.getLong("ID"));
+				
+				tarea = new Tarea(rs.getInt("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), 
+						rs.getInt("HORAS_ESTIMADAS"),rs.getInt("HORAS_REALES"),
+						empleado,estado);
 			}
 
 		} catch (SQLException e) {
@@ -157,6 +174,10 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 			} catch (SQLException e1) {
 				throw new DAOException("Error al obtener tarea de la BD, rollback no realizado", e1);
 			}
+		} catch (ServicioException se) {
+			throw new DAOException("Error en el servicio al obtener lista de Tareas de la BD", se);
+		} catch (EmpleadoNoDisponibleException se) {
+			throw new DAOException("Error al obtener lista de Tareas de la BD", se);
 		} finally {
 			try {
 				DBManager.close();
@@ -164,6 +185,6 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 				throw new DAOException("Error al cerrar la conexion de la BD", e);
 			}
 		}
-		return resultado;
+		return tarea;
 	}
 }

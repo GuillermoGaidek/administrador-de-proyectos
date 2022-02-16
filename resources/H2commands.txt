@@ -1,3 +1,13 @@
+Ver tema de los Proyectos.. donde se asignan , empleados o tarea?
+Terminar gui (abstraer componentes lo mas q peuda,hasta forzarlo)
+
+----------------------------------------
+
+chequear como se imprimen los proyectos,tareas,empleados,etc.
+PreparedStatement?mejoraria algo?
+
+--------------------------------------------------------------------------------
+
 ALTER TABLE TAREAS RENAME TO TAREA
 ALTER TABLE TAREAS ADD COLUMN ESTADO INTEGER
 ALTER TABLE TAREAS ADD COLUMN EMPLEADO BIGINT

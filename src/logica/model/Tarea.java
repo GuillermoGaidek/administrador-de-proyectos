@@ -1,7 +1,6 @@
 package logica.model;
 
 import logica.excepciones.EmpleadoNoDisponibleException;
-import logica.model.estados.Estado;
 
 public class Tarea {
 	private int id;
@@ -11,6 +10,7 @@ public class Tarea {
 	private int horasReales;
 	private Empleado empleado;
 	private Estado estado;
+	private Proyecto proyecto;
 	
 	public Tarea() {
 	}
@@ -83,12 +83,20 @@ public class Tarea {
 	public void setHorasReales(int horasReales) {
 		this.horasReales = horasReales;
 	}
+	
+	public Proyecto getProyecto() {
+		return proyecto;
+	}
+
+	public void setProyecto(Proyecto proyecto) {
+		this.proyecto = proyecto;
+	}
 
 	@Override
 	public String toString() {
 		return "Tarea [id=" + id + ", titulo=" + titulo + ", descripcion=" + descripcion + ", horasEstimadas="
 				+ horasEstimadas + ", horasReales=" + horasReales + ", empleado=" + empleado + ", estado=" + estado
-				+ "]";
+				+ ", proyecto=" + proyecto + "]";
 	}
 
 }

@@ -1,5 +1,6 @@
 package persistencia.dao;
 
+import logica.model.Tarea;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,22 +8,25 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import logica.excepciones.DAOException;
+import logica.excepciones.EmpleadoNoDisponibleException;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
 import logica.model.Estado;
+import logica.model.Proyecto;
 import logica.service.GenericService;
 import persistencia.jdbc.DBManager;
 
-public class EstadoDAOH2Impl implements DAO<Estado> {
+public class ProyectoDAOH2Impl implements DAO<Proyecto> {
 	
 	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
+	GenericService<Tarea> estadoService = new GenericService<Tarea>(new TareaDAOH2Impl());
+	
 	
 	@Override
-	public void crear(Estado estado) throws DAOException {
+	public void crear(Proyecto p) throws DAOException {
 		
-		String sql = "INSERT INTO ESTADO (ID_EMPLEADO,INICIADO,EN_CURSO,FINALIZADO) VALUES " +
-						"(" + estado.getEmpleado().getDni() + ", " + estado.estaIniciado() + ", " +
-						estado.estaEnCurso() + ", " + estado.estaFinalizado() + ")";
+		String sql = "INSERT INTO PROYECTO (TITULO) VALUES " +
+						"('" + p.getTitulo() + "'" + ")";
 		
 		Connection c = DBManager.connect();
 		
@@ -47,8 +51,8 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 	}
 
 	@Override
-	public void borrar(Estado estado) throws DAOException {
-		String sql = "DELETE FROM ESTADO WHERE ID= " + estado.getId() ;
+	public void borrar(Proyecto p) throws DAOException {
+		String sql = "DELETE FROM PROYECTO WHERE ID= " + p.getId() ;
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
@@ -71,11 +75,11 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 	}
 
 	@Override
-	public void modificar(Estado estado) throws DAOException {
+	public void modificar(Proyecto p) throws DAOException {
 		
-		String sql = "UPDATE ESTADO SET ID_EMPLEADO=" + estado.getEmpleado().getDni() +
-						" WHERE ID=" + estado.getId();
-					
+		String sql = "UPDATE PROYECTO SET TITULO='" + p.getTitulo()  +
+						" WHERE ID=" + p.getId();
+		
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
@@ -99,28 +103,26 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 	}
 
 	@Override
-	public List<Estado> listar() throws DAOException {
-		List<Estado> lista = new ArrayList<Estado>();
-		String sql = "SELECT * FROM ESTADO";
+	public List<Proyecto> listar() throws DAOException {
+		List<Proyecto> lista = new ArrayList<Proyecto>();
+		String sql = "SELECT * FROM PROYECTO ORDER BY ID";
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery(sql);
-			
+
 			while (rs.next()) {
-				Estado estado = new Estado(rs.getLong("ID"),empleadoService.getById(rs.getLong("ID_EMPLEADO")),
-											rs.getBoolean("INICIADO"),rs.getBoolean("EN_CURSO"),rs.getBoolean("FINALIZADO"));
-				lista.add(estado);
+				
+				Proyecto p = new Proyecto(rs.getInt("ID"), rs.getString("TITULO"));
+				lista.add(p);
 			}
 		} catch (SQLException e) {
 			try {
 				c.rollback();
-				throw new DAOException("Error al obtener datos de la BD, rollback realizado", e);
+				throw new DAOException("Error al obtener lista de tareas de la BD, rollback realizado", e);
 			} catch (SQLException e1) {
-				throw new DAOException("Error al obtener datos de la BD, rollback no realizado", e1);
+				throw new DAOException("Error al obtener lista de tareas de la BD, rollback no realizado", e1);
 			}
-		} catch (ServicioException se) {
-			throw new DAOException("Error en el servicio al obtener lista de Estados de la BD", se);
 		} finally {
 			try {
 				DBManager.close();
@@ -132,28 +134,26 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 	}
 
 	@Override
-	public Estado getById(long id) throws DAOException {
-		Estado estado = null;
-		String sql = "SELECT * FROM ESTADO WHERE ID=" + id;
+	public Proyecto getById(long id) throws DAOException {
+		Proyecto proyecto = new Proyecto();
+		String sql = "SELECT * FROM TAREA WHERE ID=" + id;
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery(sql);
 
 			if (rs.next()) {
-				estado = new Estado(rs.getLong("ID"),empleadoService.getById(rs.getLong("ID_EMPLEADO")),
-						rs.getBoolean("INICIADO"),rs.getBoolean("EN_CURSO"),rs.getBoolean("FINALIZADO"));
+
+				proyecto = new Proyecto(rs.getInt("ID"), rs.getString("TITULO"));
 			}
 
 		} catch (SQLException e) {
 			try {
 				c.rollback();
-				throw new DAOException("Error al obtener el Estado de la BD, rollback realizado", e);
+				throw new DAOException("Error al obtener tarea de la BD, rollback realizado", e);
 			} catch (SQLException e1) {
-				throw new DAOException("Error al obtener el Estado de la BD, rollback no realizado", e1);
+				throw new DAOException("Error al obtener tarea de la BD, rollback no realizado", e1);
 			}
-		} catch (ServicioException se) {
-			throw new DAOException("Error en el servicio al obtener lista de Estados de la BD", se);
 		} finally {
 			try {
 				DBManager.close();
@@ -161,6 +161,7 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 				throw new DAOException("Error al cerrar la conexion de la BD", e);
 			}
 		}
-		return estado;
+		return proyecto;
 	}
+		
 }
