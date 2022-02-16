@@ -17,15 +17,16 @@ import persistencia.jdbc.DBManager;
 public class GenericEstadosDAOH2Impl<T extends Estado> implements DAO<T> {
 	
 	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
+	String tablaEstado;
 	
-	public GenericEstadosDAOH2Impl() {
-		
+	public GenericEstadosDAOH2Impl(String tablaEstado) {
+		this.tablaEstado = tablaEstado;
 	}
 	
 	@Override
 	public void crear(T estado) throws DAOException {
 		
-		String sql = "INSERT INTO ESTADO_EN_CURSO (DESCRIPCION,ID_EMPLEADO) VALUES " +
+		String sql = "INSERT INTO" + tablaEstado + "(DESCRIPCION,ID_EMPLEADO) VALUES " +
 					"('" + EstadoEnCurso.DESC + "', " + estado.getResponsable().getDni() + ")";
 		
 		Connection c = DBManager.connect();
@@ -52,7 +53,7 @@ public class GenericEstadosDAOH2Impl<T extends Estado> implements DAO<T> {
 
 	@Override
 	public void borrar(T estado) throws DAOException {
-		String sql = "DELETE FROM ESTADO_EN_CURSO WHERE ID_EMPLEADO= " + estado.getId() ;
+		String sql = "DELETE FROM" + tablaEstado + "WHERE ID_EMPLEADO= " + estado.getId() ;
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
@@ -77,7 +78,7 @@ public class GenericEstadosDAOH2Impl<T extends Estado> implements DAO<T> {
 	@Override
 	public void modificar(T estado) throws DAOException {
 		
-		String sql = "UPDATE ESTADO_EN_CURSO SET ID_EMPLEADO=" + 
+		String sql = "UPDATE" + tablaEstado + "SET ID_EMPLEADO=" + 
 						estado.getResponsable().getDni() +
 						" WHERE ID=" + estado.getId();
 					
@@ -106,7 +107,7 @@ public class GenericEstadosDAOH2Impl<T extends Estado> implements DAO<T> {
 	@Override
 	public List<T> listar() throws DAOException {
 		List<T> lista = new ArrayList<T>();
-		String sql = "SELECT * FROM ESTADO_EN_CURSO;";
+		String sql = "SELECT * FROM" + tablaEstado;
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
@@ -139,7 +140,7 @@ public class GenericEstadosDAOH2Impl<T extends Estado> implements DAO<T> {
 	@Override
 	public T getById(long id) throws DAOException {
 		T estado = null;
-		String sql = "SELECT * FROM ESTADO_EN_CURSO WHERE ID=" + id;
+		String sql = "SELECT * FROM" + tablaEstado + "WHERE ID=" + id;
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();

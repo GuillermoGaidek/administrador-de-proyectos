@@ -8,15 +8,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import logica.excepciones.DAOException;
+import logica.model.Empleado;
 import logica.model.Tarea;
+import logica.model.estados.Estado;
+import logica.service.GenericService;
 import persistencia.jdbc.DBManager;
 
 public class TareaDAOH2Impl implements DAO<Tarea> {
 	
+	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
+	GenericService<Estado> estadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
+	
+	
 	@Override
 	public void crear(Tarea t) throws DAOException {
 		
-		String sql = "INSERT INTO TAREA (TITULO,DESCRIPCION,HORAS_ESTIMADAS,HORAS_REALES,EMPLEADO,ESTADO) VALUES " +
+		String sql = "INSERT INTO TAREA (TITULO,DESCRIPCION,HORAS_ESTIMADAS,HORAS_REALES,ID_EMPLEADO,ID_ESTADO) VALUES " +
 		"('" + t.getTitulo() + "', '" + t.getDescripcion() + "', " + t.getHorasEstimadas() + ", " + t.getHorasReales() +
 		t.getEmpleado().getDni() + "," + t.getEstado().getId() + ")";
 		
@@ -44,7 +51,7 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 
 	@Override
 	public void borrar(Tarea t) throws DAOException {
-		String sql = "DELETE FROM TAREAS WHERE ID= " + t.getId() ;
+		String sql = "DELETE FROM TAREA WHERE ID= " + t.getId() ;
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
@@ -72,7 +79,7 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 		String sql = "UPDATE TAREA SET " +
 		"TITULO='" + t.getTitulo() + "',DESCRIPCION='" + t.getDescripcion() + 
 		"',HORAS_ESTIMADAS=" + t.getHorasEstimadas() + ",HORAS_REALES=" + t.getHorasReales() + 
-		",EMPLEADO=" + t.getEmpleado() + ",ESTADO=" + t.getEstado().getId() +
+		",ID_EMPLEADO=" + t.getEmpleado().getDni() + ",ID_ESTADO=" + t.getEstado().getId() +
 		" WHERE ID=" + t.getId();
 		
 		Connection c = DBManager.connect();
@@ -100,15 +107,16 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 	@Override
 	public List<Tarea> listar() throws DAOException {
 		List<Tarea> lista = new ArrayList<Tarea>();
-		String sql = "SELECT * FROM TAREA ORDER BY TITULO";
+		String sql = "SELECT * FROM TAREA ORDER BY ID";
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery(sql);
 
 			while (rs.next()) {
+				
 				Tarea a = new Tarea(rs.getInt("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), rs.getInt("HORAS_ESTIMADAS"),
-						rs.getInt("HORAS_REALES"));
+						rs.getInt("HORAS_REALES"),rs);
 				lista.add(a);
 			}
 		} catch (SQLException e) {

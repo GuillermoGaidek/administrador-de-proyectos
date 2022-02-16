@@ -19,4 +19,5 @@ public class Estado {
 	public Empleado getResponsable() {
 		return responsable;
 	}
+	
 }
