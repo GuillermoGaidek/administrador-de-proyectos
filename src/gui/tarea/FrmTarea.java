@@ -19,7 +19,7 @@ import logica.model.Tarea;
 import logica.service.TareaService;
 
 public class FrmTarea extends JFrame implements ActionListener {
-	private TareaService servicio;
+	private TareaService tareaService;
 	private JLabel LblTituloVentana;
 	private JLabel LblTitulo;
 	private JLabel LblDescripcion;
@@ -35,7 +35,7 @@ public class FrmTarea extends JFrame implements ActionListener {
 	private int id;
 	
 	public FrmTarea(int id, FrmListadoTareas frm, boolean llenar) {
-		servicio = new TareaService();
+		tareaService = new TareaService();
 		this.id = id;
 		this.frm = frm;
 		this.llenar = llenar;
@@ -62,7 +62,7 @@ public class FrmTarea extends JFrame implements ActionListener {
 	
 	private void LlenarForm() {
 		try {
-			Tarea t = servicio.getTarea(id);
+			Tarea t = tareaService.getById(id);
 			TxtTitulo.setText(t.getTitulo());
 			TxtDescripcion.setText(t.getDescripcion());
 			TxtHorasEstimadas.setText(String.valueOf(t.getHorasEstimadas()));
@@ -129,10 +129,10 @@ public class FrmTarea extends JFrame implements ActionListener {
 				t.setHorasEstimadas(Integer.parseInt(TxtHorasEstimadas.getText()));
 				t.setHorasReales(Integer.parseInt(TxtHorasReales.getText()));
 				if(id == -1) {
-					servicio.crear(t);
+					tareaService.crear(t);
 				} else {
 					t.setId(id);
-					servicio.modificar(t);
+					tareaService.modificar(t);
 				}
 				frm.CargarTabla();
 				this.setVisible(false);

@@ -4,10 +4,14 @@ import logica.model.Empleado;
 
 public class EstadoIniciado extends Estado{
 	
-	public EstadoIniciado(Empleado responsable) {
+	public final static String DESC = "La tarea ha iniciado";
+	
+	public EstadoIniciado(long id,Empleado responsable) {
+		super(id);
 		this.responsable = responsable;
+		
 	}
-
+	
 	@Override
 	public String toString() {
 		return "EstadoIniciado [responsable=" + responsable + "]";

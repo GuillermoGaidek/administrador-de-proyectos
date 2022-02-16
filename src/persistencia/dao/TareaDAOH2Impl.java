@@ -15,9 +15,13 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 	
 	@Override
 	public void crear(Tarea t) throws DAOException {
-		String sql = "INSERT INTO TAREAS (TITULO,DESCRIPCION,HORASESTIMADAS,HORASREALES) VALUES " +
-		"('" + t.getTitulo() + "', '" + t.getDescripcion() + "', " + t.getHorasEstimadas() + ", " + t.getHorasReales() + ")";
+		
+		String sql = "INSERT INTO TAREA (TITULO,DESCRIPCION,HORAS_ESTIMADAS,HORAS_REALES,EMPLEADO,ESTADO) VALUES " +
+		"('" + t.getTitulo() + "', '" + t.getDescripcion() + "', " + t.getHorasEstimadas() + ", " + t.getHorasReales() +
+		t.getEmpleado().getDni() + "," + t.getEstado().getId() + ")";
+		
 		Connection c = DBManager.connect();
+		
 		try {
 			Statement s = c.createStatement();
 			s.executeUpdate(sql);
@@ -64,9 +68,13 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 
 	@Override
 	public void modificar(Tarea t) throws DAOException {
-		String sql = "UPDATE TAREAS SET " +
-		"TITULO='" + t.getTitulo() + "',DESCRIPCION='" + t.getDescripcion() + "',HORASESTIMADAS=" + t.getHorasEstimadas() + ",HORASREALES=" + t.getHorasReales()
-		+ " WHERE ID=" + t.getId();
+		
+		String sql = "UPDATE TAREA SET " +
+		"TITULO='" + t.getTitulo() + "',DESCRIPCION='" + t.getDescripcion() + 
+		"',HORAS_ESTIMADAS=" + t.getHorasEstimadas() + ",HORAS_REALES=" + t.getHorasReales() + 
+		",EMPLEADO=" + t.getEmpleado() + ",ESTADO=" + t.getEstado().getId() +
+		" WHERE ID=" + t.getId();
+		
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
@@ -92,15 +100,15 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 	@Override
 	public List<Tarea> listar() throws DAOException {
 		List<Tarea> lista = new ArrayList<Tarea>();
-		String sql = "SELECT * FROM TAREAS ORDER BY TITULO";
+		String sql = "SELECT * FROM TAREA ORDER BY TITULO";
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery(sql);
 
 			while (rs.next()) {
-				Tarea a = new Tarea(rs.getInt("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), rs.getInt("HORASESTIMADAS"),
-						rs.getInt("HORASREALES"));
+				Tarea a = new Tarea(rs.getInt("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), rs.getInt("HORAS_ESTIMADAS"),
+						rs.getInt("HORAS_REALES"));
 				lista.add(a);
 			}
 		} catch (SQLException e) {
@@ -121,17 +129,17 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 	}
 
 	@Override
-	public Tarea getTarea(int id) throws DAOException {
+	public Tarea getById(int id) throws DAOException {
 		Tarea resultado = new Tarea();
-		String sql = "SELECT * FROM TAREAS WHERE ID=" + id;
+		String sql = "SELECT * FROM TAREA WHERE ID=" + id;
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery(sql);
 
 			if (rs.next()) {
-				resultado = new Tarea(rs.getInt("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), rs.getInt("HORASESTIMADAS"),
-						rs.getInt("HORASREALES"));
+				resultado = new Tarea(rs.getInt("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), rs.getInt("HORAS_ESTIMADAS"),
+						rs.getInt("HORAS_REALES"));
 			}
 
 		} catch (SQLException e) {

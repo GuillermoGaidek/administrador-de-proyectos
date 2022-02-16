@@ -1175,3 +1175,50 @@ INSERT INTO TAREAS (DESCRIPCION,HORASESTIMADAS,HORASREALES) VALUES ('asd', 'asd'
 	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
 	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
 	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+2022-02-15 21:25:22 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "ALTER TABLE TAREAS
+RENAME HORASESTIMADAS[*] TO HORAS_ESTIMADAS"; expected "COLUMN, CONSTRAINT, TO"; SQL statement:
+ALTER TABLE TAREAS
+RENAME HORASESTIMADAS TO horas_estimadas [42001-200]
+2022-02-15 21:26:06 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INFORMATION_SCHEMA[*].COLUMNS"; expected "INSERT"; SQL statement:
+INFORMATION_SCHEMA.COLUMNS [42001-200]
+2022-02-15 21:26:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROMINFORMATION_SCHEMA[*].TABLE_CONSTRAINTS  INFORMATION_SCHEMA.TABLES"; SQL statement:
+SELECT * FROMINFORMATION_SCHEMA.TABLE_CONSTRAINTS  INFORMATION_SCHEMA.TABLES [42000-200]
+2022-02-15 21:31:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: Unknown data type: "TO"; SQL statement:
+ALTER TABLE TAREAS
+ALTER COLUMN HORASESTIMADAS TO horas_estimadas [50004-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:505)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.command.Parser.parseColumnWithType(Parser.java:5971)
+	at org.h2.command.Parser.parseColumnForTable(Parser.java:5697)
+	at org.h2.command.Parser.parseAlterTableAlterColumnType(Parser.java:8065)
+	at org.h2.command.Parser.parseAlterTableAlter(Parser.java:7811)
+	at org.h2.command.Parser.parseAlterTable(Parser.java:7698)
+	at org.h2.command.Parser.parseAlter(Parser.java:6983)
+	at org.h2.command.Parser.parsePrepared(Parser.java:887)
+	at org.h2.command.Parser.parse(Parser.java:843)
+	at org.h2.command.Parser.parse(Parser.java:815)
+	at org.h2.command.Parser.prepareCommand(Parser.java:738)
+	at org.h2.engine.Session.prepareLocal(Session.java:657)
+	at org.h2.engine.Session.prepareCommand(Session.java:595)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1235)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:212)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:201)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1459)
+	at org.h2.server.web.WebApp.query(WebApp.java:1116)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1078)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1065)
+	at org.h2.server.web.WebThread.process(WebThread.java:178)
+	at org.h2.server.web.WebThread.run(WebThread.java:94)
+	at java.lang.Thread.run(Thread.java:750)
+2022-02-15 23:15:04 jdbc[6]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TAREAS" not found; SQL statement:
+ALTER TABLE TAREAS ALTER COLUMN EMPLEADO RENAME TO ID_EMPLEADO [42102-200]
+2022-02-16 01:38:53 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DROP ESTADO_EN_CURSO[*]"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, VIEW, ROLE, ALIAS, SCHEMA, ALL, DOMAIN, TYPE, DATATYPE, AGGREGATE, SYNONYM"; SQL statement:
+DROP ESTADO_EN_CURSO [42001-200]

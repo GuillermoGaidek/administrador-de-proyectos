@@ -29,7 +29,7 @@ public class Tarea {
 	public void asignarEmpleado(Empleado empleado) throws EmpleadoNoDisponibleException {
 		if (!empleado.estaLibre()) throw new EmpleadoNoDisponibleException("El empleado ya esta ocupado");
 		this.empleado = empleado;
-		this.empleado.pasarAOcupado();
+		this.empleado.setLibre(false);
 	}
 	
 	public Empleado getEmpleado() {

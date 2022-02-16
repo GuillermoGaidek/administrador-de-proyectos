@@ -2,7 +2,7 @@ package logica.model;
 
 public class Empleado {
 	
-	private long dni;
+	private final long dni;
 	private long costoPorHora;
 	private boolean libre = true;
 	
@@ -11,28 +11,24 @@ public class Empleado {
 		this.costoPorHora = costoPorHora;
 	}
 	
-	public long costoPorHora(int horas) {
-		return this.costoPorHora * horas;
+	public long getCostoPorHora() {
+		return costoPorHora;
 	}
-	
+
+	public void setCostoPorHora(long costoPorHora) {
+		this.costoPorHora = costoPorHora;
+	}
+
 	public boolean estaLibre() {
 		return libre;
 	}
 
-	public void pasarALibre() {
-		this.libre = true;
-	}
-	
-	public void pasarAOcupado() {
-		this.libre = false;
+	public void setLibre(boolean l) {
+		this.libre = l;
 	}
 	
 	public long getDni() {
 		return dni;
-	}
-
-	public void setDni(long dni) {
-		this.dni = dni;
 	}
 
 	@Override
