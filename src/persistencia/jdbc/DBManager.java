@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class DBManager {
 
-	private static final String DB_DRIVER = "1org.h2.Driver";
+	private static final String DB_DRIVER = "org.h2.Driver";
 	private static final String DB_URL = "jdbc:h2:/home/guillermo.gaidek/git/administrador-de-proyectos/database/db";
 	private static final String DB_USERNAME = "sa";
 	private static final String DB_PASSWORD = "";
