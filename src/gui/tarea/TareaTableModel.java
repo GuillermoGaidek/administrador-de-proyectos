@@ -10,19 +10,22 @@ import logica.model.Tarea;
 public class TareaTableModel extends AbstractTableModel {
 	
 	//INDICES DE LAS COLUMNAS
-	private static final int COLUMNA_ID= 0;
-	private static final int COLUMNA_TITULO= 1;
+	private static final int COLUMNA_ID = 0;
+	private static final int COLUMNA_TITULO = 1;
 	private static final int COLUMNA_DESCRIPCION = 2;
 	private static final int COLUMNA_HORAS_ESTIMADAS = 3;
 	private static final int COLUMNA_HORAS_REALES = 4;
+	private static final int COLUMNA_ID_EMPLEADO = 5;
+	private static final int COLUMNA_ID_ESTADO = 6;
+	private static final int COLUMNA_ID_PROYECTO = 7;
 	
 	private List<Tarea> filas;
 	
-	// NOMBRES DE LOS ENCABEZADOS
-	private String[] nombresColumnas = {"Id","Titulo", "Descripcion", "Horas Estimadas", "Horas Reales"};
+	private String[] nombresColumnas = {"Id","Titulo", "Descripcion", "Horas Estimadas", "Horas Reales",
+										"Id Empleado","Id Estado","Id Proyecto"};
 	
-	//TIPOS DE CADA COLUMNA (EN EL MISMO ORDEN DE LOS ENCABEZADOS)
-	private Class[] tiposColumnas = {Integer.class, String.class, String.class, Integer.class, Integer.class};
+	private Class[] tiposColumnas = {Integer.class, String.class, String.class, Integer.class, Integer.class,
+									 Integer.class,Integer.class,Integer.class};
 	
 	public TareaTableModel() {
 		filas = new ArrayList<Tarea>();
@@ -33,22 +36,22 @@ public class TareaTableModel extends AbstractTableModel {
 		filas = contenidoInicial;
 	}
 
-	//METODO QUE HAY QUE PISAR
+	@Override
 	public int getColumnCount() {
 		return nombresColumnas.length;
 		}
 
-	//METODO QUE HAY QUE PISAR
+	@Override
 	public int getRowCount() {
-	return filas.size();
+		return filas.size();
 	}
 
-	//METODO QUE HAY QUE PISAR
+	@Override
 	public void setValueAt(Object value, int rowIndex, int columnIndex) {
 		super.setValueAt(value, rowIndex, columnIndex);
 	}
 
-	//METODO QUE HAY QUE PISAR
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
 		Tarea T = filas.get(rowIndex);
@@ -70,6 +73,15 @@ public class TareaTableModel extends AbstractTableModel {
 		case COLUMNA_HORAS_REALES:
 			result = T.getHorasReales();
 			break;
+		case COLUMNA_ID_EMPLEADO:
+			result = T.getEmpleado();
+			break;
+		case COLUMNA_ID_ESTADO:
+			result = T.getEstado();
+			break;
+		case COLUMNA_ID_PROYECTO:
+			result = T.getProyecto();
+			break;
 		default:
 			result = new String("");
 		}
@@ -77,9 +89,9 @@ public class TareaTableModel extends AbstractTableModel {
 		return result;
 	}
 
-	//METODO QUE HAY QUE PISAR
+	@Override
 	public String getColumnName(int col) {
-		    return nombresColumnas[col];
+		return nombresColumnas[col];
     }
 
     public List<Tarea> getFilas() {

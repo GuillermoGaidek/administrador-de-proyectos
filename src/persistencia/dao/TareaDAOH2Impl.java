@@ -11,6 +11,7 @@ import logica.excepciones.EmpleadoNoDisponibleException;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
 import logica.model.Estado;
+import logica.model.Proyecto;
 import logica.model.Tarea;
 import logica.service.GenericService;
 import persistencia.jdbc.DBManager;
@@ -19,7 +20,7 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 	
 	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
 	GenericService<Estado> estadoService = new GenericService<Estado>(new EstadoDAOH2Impl());
-	
+	GenericService<Proyecto> proyectoService = new GenericService<Proyecto>(new ProyectoDAOH2Impl());
 	
 	@Override
 	public void crear(Tarea t) throws DAOException {
@@ -118,11 +119,13 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 				Empleado empleado = empleadoService.getById(rs.getLong("ID_EMPLEADO"));
 				empleado.setLibre(true);
 				
-				Estado estado = estadoService.getById(rs.getLong("ID"));
+				Estado estado = estadoService.getById(rs.getLong("ID_ESTADO"));
+				
+				Proyecto proyecto = proyectoService.getById(rs.getLong("ID_PROYECTO"));
 				
 				Tarea a = new Tarea(rs.getInt("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), 
 									rs.getInt("HORAS_ESTIMADAS"),rs.getInt("HORAS_REALES"),
-									empleado,estado);
+									empleado,estado,proyecto);
 				lista.add(a);
 			}
 		} catch (SQLException e) {
@@ -160,11 +163,13 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 				Empleado empleado = empleadoService.getById(rs.getLong("ID_EMPLEADO"));
 				empleado.setLibre(true);
 				
-				Estado estado = estadoService.getById(rs.getLong("ID"));
+				Estado estado = estadoService.getById(rs.getLong("ID_ESTADO"));
+				
+				Proyecto proyecto = proyectoService.getById(rs.getLong("ID_PROYECTO"));
 				
 				tarea = new Tarea(rs.getInt("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), 
 						rs.getInt("HORAS_ESTIMADAS"),rs.getInt("HORAS_REALES"),
-						empleado,estado);
+						empleado,estado,proyecto);
 			}
 
 		} catch (SQLException e) {

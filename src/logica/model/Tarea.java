@@ -1,8 +1,13 @@
 package logica.model;
 
 import logica.excepciones.EmpleadoNoDisponibleException;
+import logica.excepciones.ServicioException;
+import logica.service.GenericService;
+import persistencia.dao.EmpleadoDAOH2Impl;
 
 public class Tarea {
+	
+	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
 	private int id;
 	private String titulo;
 	private String descripcion;
@@ -16,9 +21,10 @@ public class Tarea {
 	}
 	
 	public Tarea(int id, String titulo, String descripcion, int horasEstimadas,int horasReales,
-				 Empleado empleado,Estado estado) throws EmpleadoNoDisponibleException {
+				 Empleado empleado,Estado estado,Proyecto proyecto) throws EmpleadoNoDisponibleException, ServicioException {
 		asignarEmpleado(empleado);
 		this.estado = estado;
+		this.proyecto = proyecto;
 		this.id = id;
 		this.titulo = titulo;
 		this.descripcion = descripcion;
@@ -26,10 +32,11 @@ public class Tarea {
 		this.horasReales = horasReales;
 	}
 
-	public void asignarEmpleado(Empleado empleado) throws EmpleadoNoDisponibleException {
+	public void asignarEmpleado(Empleado empleado) throws EmpleadoNoDisponibleException, ServicioException {
 		if (!empleado.estaLibre()) throw new EmpleadoNoDisponibleException("El empleado ya esta ocupado");
 		this.empleado = empleado;
 		this.empleado.setLibre(false);
+		empleadoService.modificar(this.empleado);
 	}
 	
 	public Empleado getEmpleado() {

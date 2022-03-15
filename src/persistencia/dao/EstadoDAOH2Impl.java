@@ -21,7 +21,7 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 	public void crear(Estado estado) throws DAOException {
 		
 		String sql = "INSERT INTO ESTADO (ID_EMPLEADO,INICIADO,EN_CURSO,FINALIZADO) VALUES " +
-						"(" + estado.getEmpleado().getDni() + ", " + estado.estaIniciado() + ", " +
+						"(" + estado.getModificadoPor().getDni() + ", " + estado.estaIniciado() + ", " +
 						estado.estaEnCurso() + ", " + estado.estaFinalizado() + ")";
 		
 		Connection c = DBManager.connect();
@@ -73,7 +73,7 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 	@Override
 	public void modificar(Estado estado) throws DAOException {
 		
-		String sql = "UPDATE ESTADO SET ID_EMPLEADO=" + estado.getEmpleado().getDni() +
+		String sql = "UPDATE ESTADO SET ID_EMPLEADO=" + estado.getModificadoPor().getDni() +
 						" WHERE ID=" + estado.getId();
 					
 		Connection c = DBManager.connect();
