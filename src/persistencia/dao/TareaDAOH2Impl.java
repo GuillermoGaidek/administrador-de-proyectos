@@ -81,7 +81,7 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 		String sql = "UPDATE TAREA SET " + "TITULO='" + t.getTitulo() + "',DESCRIPCION='" + t.getDescripcion() + 
 						"',HORAS_ESTIMADAS=" + t.getHorasEstimadas() + ",HORAS_REALES=" + t.getHorasReales() + 
 						",ID_EMPLEADO=" + t.getEmpleado().getDni() + ",ID_ESTADO=" + t.getEstado().getId() +
-						" WHERE ID=" + t.getId();
+						",ID_PROYECTO=" + t.getProyecto().getId() + " WHERE ID=" + t.getId();
 		
 		Connection c = DBManager.connect();
 		try {

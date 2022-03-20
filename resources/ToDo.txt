@@ -7,5 +7,3 @@
 	
 	//deberia ser un dropdown
 	t.setProyecto(proyectoService.getById(Long.parseLong(TxtIdProyecto.getText())));
-	
--Clase Tarea: terminar de agregar proyecto en todos los crud
