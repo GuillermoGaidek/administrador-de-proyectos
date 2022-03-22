@@ -8,8 +8,17 @@ public class Estado {
 	private long id;
 	private Empleado modificadoPor;
 	
+	public Estado() {}
+	
 	public Estado(long id,Empleado modificadoPor,boolean iniciado,boolean enCurso,boolean finalizado) {
 		this.id = id;
+		this.modificadoPor = modificadoPor;
+		this.iniciado = iniciado; 
+		this.enCurso = enCurso;
+		this.finalizado = finalizado;
+	}
+	
+	public Estado(Empleado modificadoPor,boolean iniciado,boolean enCurso,boolean finalizado) {
 		this.modificadoPor = modificadoPor;
 		this.iniciado = iniciado; 
 		this.enCurso = enCurso;

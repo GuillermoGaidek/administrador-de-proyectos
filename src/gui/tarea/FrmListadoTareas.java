@@ -89,12 +89,12 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent e){
 		if (e.getSource() == botoneraCrud.botonAgregar) {
-			new FrmTarea(-1, this, !llenar);
+			new FrmTarea(-1, this);
 		} else if (e.getSource() == botoneraCrud.botonModificar) {
 			if(this.tabla.getSelectedRow() != -1) {
 				int fila = this.tabla.getSelectedRow();
-				int id = (int)this.tabla.getValueAt(fila, 0);
-				new FrmTarea(id, this, llenar);	
+				long idTarea = (int)this.tabla.getValueAt(fila, 0);
+				new FrmTarea(idTarea, this);	
 			} else {
 				JOptionPane.showMessageDialog(this, "No selecciono ninguna tarea",
 												"Modificar",JOptionPane.ERROR_MESSAGE);

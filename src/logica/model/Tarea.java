@@ -8,7 +8,7 @@ import persistencia.dao.EmpleadoDAOH2Impl;
 public class Tarea {
 	
 	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
-	private int id;
+	private long id;
 	private String titulo;
 	private String descripcion;
 	private int horasEstimadas;
@@ -17,10 +17,9 @@ public class Tarea {
 	private Estado estado;
 	private Proyecto proyecto;
 	
-	public Tarea() {
-	}
+	public Tarea() {}
 	
-	public Tarea(int id, String titulo, String descripcion, int horasEstimadas,int horasReales,
+	public Tarea(long id, String titulo, String descripcion, int horasEstimadas,int horasReales,
 				 Empleado empleado,Estado estado,Proyecto proyecto) throws EmpleadoNoDisponibleException, ServicioException {
 		asignarEmpleado(empleado);
 		this.estado = estado;
@@ -43,19 +42,19 @@ public class Tarea {
 		return this.empleado;
 	}
 
-	public Estado cambiarEstadoA(Estado nuevoEstado) {
-		return nuevoEstado;
+	public void cambiarEstadoA(Estado nuevoEstado) {
+		this.estado = nuevoEstado;
 	}
 	
 	public Estado getEstado() {
 		return this.estado;
 	}
 	
-	public int getId() {
+	public long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

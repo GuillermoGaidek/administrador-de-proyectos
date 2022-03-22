@@ -14,10 +14,12 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
+import logica.model.Estado;
 import logica.model.Proyecto;
 import logica.model.Tarea;
 import logica.service.GenericService;
 import persistencia.dao.EmpleadoDAOH2Impl;
+import persistencia.dao.EstadoDAOH2Impl;
 import persistencia.dao.ProyectoDAOH2Impl;
 import persistencia.dao.TareaDAOH2Impl;
 
@@ -26,15 +28,19 @@ public class FrmTarea extends JFrame implements ActionListener {
 	GenericService<Tarea> tareaService = new GenericService<Tarea>(new TareaDAOH2Impl());
 	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
 	GenericService<Proyecto> proyectoService = new GenericService<Proyecto>(new ProyectoDAOH2Impl());
+	GenericService<Estado> estadoService = new GenericService<Estado>(new EstadoDAOH2Impl());
+	
+	boolean iniciado = false;
+	boolean enCurso = false;
+	boolean finalizado = false;
 	
 	private JLabel LblTituloVentana;
-	
 	private JLabel LblTitulo;
 	private JLabel LblDescripcion;
 	private JLabel LblHorasEstimadas;
 	private JLabel LblHorasReales;
 	private JLabel LblIdEmpleado;
-	private JLabel LblIdEstado;
+	private JLabel LblEstado;
 	private JLabel LblIdProyecto;
 	
 	private JTextField TxtTitulo;
@@ -42,19 +48,17 @@ public class FrmTarea extends JFrame implements ActionListener {
 	private JTextField TxtHorasEstimadas;
 	private JTextField TxtHorasReales;
 	private JTextField TxtIdEmpleado;
-	private JTextField TxtIdEstado;
+	private JTextField TxtEstado;
 	private JTextField TxtIdProyecto;
 	
 	private JButton BtnGuardar;
 	private FrmListadoTareas frm;
-	private boolean llenar;
-	private int id;
+	private long idTarea;
 	
-	public FrmTarea(int id, FrmListadoTareas frm, boolean llenar) {
+	public FrmTarea(long idTarea, FrmListadoTareas frm) {
 
-		this.id = id;
+		this.idTarea = idTarea;
 		this.frm = frm;
-		this.llenar = llenar;
 		
 		// setea titulo ventana
 		this.setTitle("Tarea");
@@ -74,20 +78,21 @@ public class FrmTarea extends JFrame implements ActionListener {
 		// muestra la ventana
 		this.setVisible(true);
 
-		if(llenar) {
+		if(idTarea != -1) {
 			LlenarForm();
 		}
 	}
 	
 	private void LlenarForm() {
 		try {
-			Tarea t = tareaService.getById(id);
+			Tarea t = tareaService.getById(idTarea);
+			
 			TxtTitulo.setText(t.getTitulo());
 			TxtDescripcion.setText(t.getDescripcion());
 			TxtHorasEstimadas.setText(String.valueOf(t.getHorasEstimadas()));
 			TxtHorasReales.setText(String.valueOf(t.getHorasReales()));
 			TxtIdEmpleado.setText(String.valueOf(t.getEmpleado()));
-			TxtIdEstado.setText(String.valueOf(t.getEstado()));
+			TxtEstado.setText(stringifyEstado(t));
 			TxtIdProyecto.setText(String.valueOf(t.getProyecto()));
 		} catch (ServicioException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Tarea",
@@ -140,11 +145,11 @@ public class FrmTarea extends JFrame implements ActionListener {
 		TxtIdProyecto = new JTextField("", 20);
 		panelCampos.add(TxtIdProyecto);
 		
-		LblIdEstado = new JLabel("Estado");
-		panelCampos.add(LblIdEstado);
+		LblEstado = new JLabel("Estado");
+		panelCampos.add(LblEstado);
 		
-		TxtIdEstado = new JTextField("", 20);
-		panelCampos.add(TxtIdEstado);
+		TxtEstado = new JTextField("", 20);
+		panelCampos.add(TxtEstado);
 
 		panel.add(panelCampos, BorderLayout.CENTER);
 		
@@ -168,20 +173,20 @@ public class FrmTarea extends JFrame implements ActionListener {
 				t.setDescripcion(TxtDescripcion.getText());
 				t.setHorasEstimadas(Integer.parseInt(TxtHorasEstimadas.getText()));
 				t.setHorasReales(Integer.parseInt(TxtHorasReales.getText()));
-				
-				//deberia ser un dropdown
+				//Deberia ser un dropdown
 				t.asignarEmpleado(empleadoService.getById(Long.parseLong(TxtIdEmpleado.getText())));
-				
-				//deberia crear el estado..
-				t.cambiarEstadoA(Integer.parseInt(TxtHorasReales.getText()));
-				
-				//deberia ser un dropdown
+				//Deberia ser un dropdown
 				t.setProyecto(proyectoService.getById(Long.parseLong(TxtIdProyecto.getText())));
 				
-				if(id == -1) {
+				//El estado deberia ser un dropdown(iniciado,encurso..) y tener/guardar Timestamp. 
+				parseEstado(TxtEstado.getText());
+				estadoService.crear(new Estado(t.getEmpleado(),iniciado,enCurso,finalizado));//Creo estado.
+				t.cambiarEstadoA(estadoService.listar().get(0));//Asigno el ultimo estado creado recien
+				
+				if(idTarea == -1) {
 					tareaService.crear(t);
 				} else {
-					t.setId(id);
+					t.setId(idTarea);
 					tareaService.modificar(t);
 				}
 				frm.cargarTabla();
@@ -200,4 +205,33 @@ public class FrmTarea extends JFrame implements ActionListener {
 		}
 		
 	}
+	
+	private String stringifyEstado(Tarea t) {
+		
+		String estado = null;
+		
+		if(t.getEstado().estaIniciado()) {
+			estado = "Iniciado";
+		} else if(t.getEstado().estaEnCurso()) {
+			estado = "En curso";
+		} else if(t.getEstado().estaFinalizado()) {
+			estado = "Finalizado";
+		}
+		
+		return estado;
+	}
+	
+	private void parseEstado(String estado) {
+		
+		if(estado == "Iniciado") {
+			iniciado = true;
+		} else if(estado == "En curso") {
+			enCurso = true;
+		} else if(estado == "Finalizado") {
+			finalizado = true;
+		}
+		
+	}
+	
+	
 }

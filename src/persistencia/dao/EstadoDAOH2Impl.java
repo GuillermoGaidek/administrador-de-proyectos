@@ -101,7 +101,7 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 	@Override
 	public List<Estado> listar() throws DAOException {
 		List<Estado> lista = new ArrayList<Estado>();
-		String sql = "SELECT * FROM ESTADO";
+		String sql = "SELECT * FROM ESTADO ORDER BY DESC";
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
@@ -163,4 +163,5 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 		}
 		return estado;
 	}
+	
 }

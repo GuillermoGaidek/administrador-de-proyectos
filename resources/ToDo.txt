@@ -1,9 +1,3 @@
--Clase FrmTarea: terminar metodos comentados en actionPerformed:
-	//deberia ser un dropdown
-	t.asignarEmpleado(empleadoService.getById(Long.parseLong(TxtIdEmpleado.getText())));
+1)Agregar Timestamp para la clase Estado y en BD.
 	
-	//deberia crear el estado..
-	t.cambiarEstadoA(Integer.parseInt(TxtHorasReales.getText()));
-	
-	//deberia ser un dropdown
-	t.setProyecto(proyectoService.getById(Long.parseLong(TxtIdProyecto.getText())));
+2)Clase FrmTarea: terminar dropdowns en metodos comentados en actionPerformed.
