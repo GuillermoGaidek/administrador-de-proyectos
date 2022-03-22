@@ -1,3 +1,24 @@
-1)Agregar Timestamp para la clase Estado y en BD.
+1)Manejo de errores poco descriptivo y mal nombre de parametros.
+
+2)Si modifico me va a decir que el empleado ya exsite, debido a esa misma linea.
+Ver de matchear con id o algo asi.
+
+3)Al borrar una tarea el empleado deberia quedar libre automagicamente.
+
+4)Manejar errores de constrains,como que no se puede borrar si es FK de otra entidad
+
+5)Error que da null es por esta linea que me salta al Exception general. Porque no existe el empleado me tira
+un nullPointerException. Eso porque no estoy manejadno bien los errores tipo LABO2.
+
+
+_______________________________________________________________________________________________________
+
+
+1)Fijarme cuando termine con las otras interfaces que me va a cambiar bastante lo que hice,
+ya que los empleados solo los voy a poder asignar a las tareas dependiendo de el proyecto ye eso..
+
+2)Agregar Timestamp para la clase Estado y en BD.
 	
-2)Clase FrmTarea: terminar dropdowns en metodos comentados en actionPerformed.
+3)Clase FrmTarea: terminar dropdowns en metodos comentados en actionPerformed.
+
+4)Agregar el tema de obtener las tareas y los empleados en el DAO de Proyecto.(En listar y getById)

@@ -7,10 +7,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import logica.excepciones.DAOException;
+import logica.excepciones.EmpleadoNoDisponibleException;
+import logica.excepciones.ServicioException;
 import logica.model.Empleado;
+import logica.model.Proyecto;
+import logica.service.GenericService;
 import persistencia.jdbc.DBManager;
 
 public class EmpleadoDAOH2Impl implements DAO<Empleado> {
+	
+	GenericService<Proyecto> proyectoService = new GenericService<Proyecto>(new ProyectoDAOH2Impl());
 	
 	@Override
 	public void crear(Empleado empleado) throws DAOException {
@@ -70,7 +76,7 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 		
 		String sql = "UPDATE EMPLEADO SET " +
 					"DNI=" + empleado.getDni() + ",COSTO_POR_HORA=" + empleado.getCostoPorHora() + 
-					",LIBRE=" + empleado.estaLibre() + " WHERE ID=" + empleado.getDni();;
+					",LIBRE=" + empleado.estaLibre() + " WHERE DNI=" + empleado.getDni();;
 		
 		Connection c = DBManager.connect();
 		try {
@@ -104,17 +110,20 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 			ResultSet rs = s.executeQuery(sql);
 
 			while (rs.next()) {
-				Empleado empleado = new Empleado(rs.getLong("DNI"), rs.getInt("COSTO_POR_HORA"));
+				Proyecto proyecto = proyectoService.getById(rs.getLong("ID_PROYECTO"));
+				Empleado empleado = new Empleado(rs.getLong("DNI"), rs.getInt("COSTO_POR_HORA"),proyecto);
 				empleado.setLibre(rs.getBoolean("LIBRE"));
 				lista.add(empleado);
 			}
 		} catch (SQLException e) {
 			try {
 				c.rollback();
-				throw new DAOException("Error al obtener los datos de la BD, rollback realizado", e);
+				throw new DAOException("Error al obtener lista de tareas de la BD, rollback realizado", e);
 			} catch (SQLException e1) {
-				throw new DAOException("Error al obtener los datos de la BD, rollback no realizado", e1);
+				throw new DAOException("Error al obtener lista de tareas de la BD, rollback no realizado", e1);
 			}
+		} catch (ServicioException se) {
+			throw new DAOException("Error en el servicio al obtener lista de Tareas de la BD", se);
 		} finally {
 			try {
 				DBManager.close();
@@ -135,7 +144,8 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 			ResultSet rs = s.executeQuery(sql);
 
 			if (rs.next()) {
-				empleado = new Empleado(rs.getLong("DNI"), rs.getLong("COSTO_POR_HORA"));
+				Proyecto proyecto = proyectoService.getById(rs.getLong("ID_PROYECTO"));
+				empleado = new Empleado(rs.getLong("DNI"), rs.getInt("COSTO_POR_HORA"),proyecto);
 				empleado.setLibre(rs.getBoolean("LIBRE"));
 			}
 
@@ -146,6 +156,8 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 			} catch (SQLException e1) {
 				throw new DAOException("Error al obtener registro de la BD, rollback no realizado", e1);
 			}
+		} catch (ServicioException se) {
+			throw new DAOException("Error en el servicio al obtener lista de Tareas de la BD", se);
 		} finally {
 			try {
 				DBManager.close();

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Proyecto {
 	
-	private int id;
+	private long id;
 	private String titulo;
 	private List<Empleado> empleados;
 	private List<Tarea> tareas;
@@ -12,8 +12,12 @@ public class Proyecto {
 	public Proyecto() {
 		
 	}
-
-	public Proyecto(int id,String titulo) {
+	
+	public Proyecto(String titulo) {
+		this.titulo = titulo;
+	}
+	
+	public Proyecto(long id,String titulo) {
 		this.id = id;
 		this.titulo = titulo;
 	}
@@ -49,11 +53,11 @@ public class Proyecto {
 		this.titulo = titulo;
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

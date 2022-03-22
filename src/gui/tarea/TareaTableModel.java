@@ -74,13 +74,13 @@ public class TareaTableModel extends AbstractTableModel {
 			result = T.getHorasReales();
 			break;
 		case COLUMNA_ID_EMPLEADO:
-			result = T.getEmpleado();
+			result = T.getEmpleado().getDni();
 			break;
 		case COLUMNA_ID_ESTADO:
-			result = T.getEstado();
+			result = T.getEstado().stringifyEstado(T);
 			break;
 		case COLUMNA_ID_PROYECTO:
-			result = T.getProyecto();
+			result = T.getProyecto().getId();
 			break;
 		default:
 			result = new String("");

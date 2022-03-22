@@ -7,9 +7,10 @@ public class Empleado {
 	private boolean libre = true;
 	private Proyecto proyecto;
 	
-	public Empleado(long dni, long costoPorHora) {
+	public Empleado(long dni, long costoPorHora,Proyecto proyecto) {
 		this.dni = dni;
 		this.costoPorHora = costoPorHora;
+		this.proyecto = proyecto;
 	}
 	
 	public long getCostoPorHora() {

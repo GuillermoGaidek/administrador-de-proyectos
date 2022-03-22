@@ -25,6 +25,21 @@ public class Estado {
 		this.finalizado = finalizado;
 	}
 	
+	public String stringifyEstado(Tarea t) {
+			
+		String estado = null;
+		
+		if(t.getEstado().estaIniciado()) {
+			estado = "Iniciado";
+		} else if(t.getEstado().estaEnCurso()) {
+			estado = "En curso";
+		} else if(t.getEstado().estaFinalizado()) {
+			estado = "Finalizado";
+		}
+		
+		return estado;
+	}	
+	
 	public long getId() {
 		return id;
 	}

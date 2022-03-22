@@ -18,10 +18,6 @@ import persistencia.jdbc.DBManager;
 
 public class ProyectoDAOH2Impl implements DAO<Proyecto> {
 	
-	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
-	GenericService<Tarea> estadoService = new GenericService<Tarea>(new TareaDAOH2Impl());
-	
-	
 	@Override
 	public void crear(Proyecto p) throws DAOException {
 		
@@ -112,8 +108,7 @@ public class ProyectoDAOH2Impl implements DAO<Proyecto> {
 			ResultSet rs = s.executeQuery(sql);
 
 			while (rs.next()) {
-				
-				Proyecto p = new Proyecto(rs.getInt("ID"), rs.getString("TITULO"));
+				Proyecto p = new Proyecto(rs.getLong("ID"), rs.getString("TITULO"));
 				lista.add(p);
 			}
 		} catch (SQLException e) {
@@ -136,15 +131,14 @@ public class ProyectoDAOH2Impl implements DAO<Proyecto> {
 	@Override
 	public Proyecto getById(long id) throws DAOException {
 		Proyecto proyecto = new Proyecto();
-		String sql = "SELECT * FROM TAREA WHERE ID=" + id;
+		String sql = "SELECT * FROM PROYECTO WHERE ID=" + id;
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery(sql);
 
 			if (rs.next()) {
-
-				proyecto = new Proyecto(rs.getInt("ID"), rs.getString("TITULO"));
+				proyecto = new Proyecto(rs.getLong("ID"), rs.getString("TITULO"));
 			}
 
 		} catch (SQLException e) {

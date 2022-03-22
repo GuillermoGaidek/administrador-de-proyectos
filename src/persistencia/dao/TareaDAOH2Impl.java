@@ -27,7 +27,7 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 		
 		String sql = "INSERT INTO TAREA (TITULO,DESCRIPCION,HORAS_ESTIMADAS,HORAS_REALES,ID_EMPLEADO,ID_ESTADO,ID_PROYECTO) VALUES " +
 		"('" + t.getTitulo() + "', '" + t.getDescripcion() + "', " + t.getHorasEstimadas() + ", " + t.getHorasReales() +
-		t.getEmpleado().getDni() + "," + t.getEstado().getId() + "," + t.getProyecto().getId() + ")";
+		", " + t.getEmpleado().getDni() + ", " + t.getEstado().getId() + ", " + t.getProyecto().getId() + ")";
 		
 		Connection c = DBManager.connect();
 		
@@ -123,7 +123,7 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 				
 				Proyecto proyecto = proyectoService.getById(rs.getLong("ID_PROYECTO"));
 				
-				Tarea a = new Tarea(rs.getInt("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), 
+				Tarea a = new Tarea(rs.getLong("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), 
 									rs.getInt("HORAS_ESTIMADAS"),rs.getInt("HORAS_REALES"),
 									empleado,estado,proyecto);
 				lista.add(a);
@@ -167,7 +167,7 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 				
 				Proyecto proyecto = proyectoService.getById(rs.getLong("ID_PROYECTO"));
 				
-				tarea = new Tarea(rs.getInt("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), 
+				tarea = new Tarea(rs.getLong("ID"), rs.getString("TITULO"), rs.getString("DESCRIPCION"), 
 						rs.getInt("HORAS_ESTIMADAS"),rs.getInt("HORAS_REALES"),
 						empleado,estado,proyecto);
 			}

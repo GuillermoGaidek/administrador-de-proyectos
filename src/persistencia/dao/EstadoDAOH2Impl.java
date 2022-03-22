@@ -71,37 +71,14 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 	}
 
 	@Override
-	public void modificar(Estado estado) throws DAOException {
-		
-		String sql = "UPDATE ESTADO SET ID_EMPLEADO=" + estado.getModificadoPor().getDni() +
-						" WHERE ID=" + estado.getId();
-					
-		Connection c = DBManager.connect();
-		try {
-			Statement s = c.createStatement();
-			s.executeUpdate(sql);
-			c.commit();
-		} catch (SQLException e) {
-			try {
-				c.rollback();
-				throw new DAOException("Error al modificar registro de la BD, rollback realizado", e);
-			} catch (SQLException e1) {
-				throw new DAOException("Error al modificar registro de la BD, rollback no realizado", e1);
-			}
-		} finally {
-			try {
-				DBManager.close();
-			} catch (SQLException e) {
-				throw new DAOException("Error al cerrar la conexion de la BD", e);
-			}
-		}
-		
+	public void modificar(Estado estado){
+		//No se deberia poder modificar los estados ya que son como un historial}
 	}
 
 	@Override
 	public List<Estado> listar() throws DAOException {
 		List<Estado> lista = new ArrayList<Estado>();
-		String sql = "SELECT * FROM ESTADO ORDER BY DESC";
+		String sql = "SELECT * FROM ESTADO ORDER BY ID DESC";
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
@@ -109,7 +86,8 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 			
 			while (rs.next()) {
 				Estado estado = new Estado(rs.getLong("ID"),empleadoService.getById(rs.getLong("ID_EMPLEADO")),
-											rs.getBoolean("INICIADO"),rs.getBoolean("EN_CURSO"),rs.getBoolean("FINALIZADO"));
+											rs.getBoolean("INICIADO"),rs.getBoolean("EN_CURSO"),
+											rs.getBoolean("FINALIZADO"));
 				lista.add(estado);
 			}
 		} catch (SQLException e) {

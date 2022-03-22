@@ -91,9 +91,9 @@ public class FrmTarea extends JFrame implements ActionListener {
 			TxtDescripcion.setText(t.getDescripcion());
 			TxtHorasEstimadas.setText(String.valueOf(t.getHorasEstimadas()));
 			TxtHorasReales.setText(String.valueOf(t.getHorasReales()));
-			TxtIdEmpleado.setText(String.valueOf(t.getEmpleado()));
-			TxtEstado.setText(stringifyEstado(t));
-			TxtIdProyecto.setText(String.valueOf(t.getProyecto()));
+			TxtIdEmpleado.setText(String.valueOf(t.getEmpleado().getDni()));
+			TxtEstado.setText(t.getEstado().stringifyEstado(t));
+			TxtIdProyecto.setText(String.valueOf(t.getProyecto().getId()));
 		} catch (ServicioException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Tarea",
 			        JOptionPane.ERROR_MESSAGE);
@@ -193,41 +193,26 @@ public class FrmTarea extends JFrame implements ActionListener {
 				this.setVisible(false);
 				dispose();
 			} catch (ServicioException ex) {
-				JOptionPane.showMessageDialog(this, ex.getMessage(), "Tarea",
+				JOptionPane.showMessageDialog(this, ex.getMessage(), "FrmTarea",
 				        JOptionPane.ERROR_MESSAGE);
 			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(this, "Las horas deben ser numeros. Vuelva a intentar nuevamente", "Tarea",
+				JOptionPane.showMessageDialog(this, "Las horas deben ser numeros. Vuelva a intentar nuevamente", "FrmTarea",
 				        JOptionPane.ERROR_MESSAGE);
 			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(this, "Algo salio mal: " + ex.getMessage(), "Tarea",
+				JOptionPane.showMessageDialog(this, "Algo salio mal: " + ex.getMessage(), "FrmTarea",
 				        JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		
 	}
 	
-	private String stringifyEstado(Tarea t) {
-		
-		String estado = null;
-		
-		if(t.getEstado().estaIniciado()) {
-			estado = "Iniciado";
-		} else if(t.getEstado().estaEnCurso()) {
-			estado = "En curso";
-		} else if(t.getEstado().estaFinalizado()) {
-			estado = "Finalizado";
-		}
-		
-		return estado;
-	}
-	
 	private void parseEstado(String estado) {
 		
-		if(estado == "Iniciado") {
+		if(estado.replaceAll("\\s+","").toUpperCase().equals("INICIADO")) {
 			iniciado = true;
-		} else if(estado == "En curso") {
+		} else if(estado.replaceAll("\\s+","").toUpperCase().equals("ENCURSO")) {
 			enCurso = true;
-		} else if(estado == "Finalizado") {
+		} else if(estado.replaceAll("\\s+","").toUpperCase().equals("FINALIZADO")) {
 			finalizado = true;
 		}
 		

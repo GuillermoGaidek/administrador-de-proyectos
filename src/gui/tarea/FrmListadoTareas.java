@@ -34,7 +34,6 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 	private JScrollPane scrollPaneParaTabla;
 	private JLabel LblTitulo;
 	private BotoneraCrud botoneraCrud = new BotoneraCrud();
-	boolean llenar = true;
 	
 	public FrmListadoTareas() {
 		
@@ -93,7 +92,7 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 		} else if (e.getSource() == botoneraCrud.botonModificar) {
 			if(this.tabla.getSelectedRow() != -1) {
 				int fila = this.tabla.getSelectedRow();
-				long idTarea = (int)this.tabla.getValueAt(fila, 0);
+				long idTarea = (long)this.tabla.getValueAt(fila, 0);
 				new FrmTarea(idTarea, this);	
 			} else {
 				JOptionPane.showMessageDialog(this, "No selecciono ninguna tarea",
@@ -103,7 +102,7 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 			try {
 				if(this.tabla.getSelectedRow() != -1) {
 					int fila = this.tabla.getSelectedRow();
-					int id = (int)this.tabla.getValueAt(fila, 0);
+					long id = (long)this.tabla.getValueAt(fila, 0);
 					Tarea t = new Tarea();
 					t.setId(id);
 					tareaService.borrar(t);
