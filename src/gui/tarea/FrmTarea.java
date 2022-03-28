@@ -54,6 +54,7 @@ public class FrmTarea extends JFrame implements ActionListener {
 	private JButton BtnGuardar;
 	private FrmListadoTareas frm;
 	private long idTarea;
+	Tarea tarea;
 	
 	public FrmTarea(long idTarea, FrmListadoTareas frm) {
 
@@ -85,15 +86,15 @@ public class FrmTarea extends JFrame implements ActionListener {
 	
 	private void LlenarForm() {
 		try {
-			Tarea t = tareaService.getById(idTarea);
+			tarea = tareaService.getById(idTarea);
 			
-			TxtTitulo.setText(t.getTitulo());
-			TxtDescripcion.setText(t.getDescripcion());
-			TxtHorasEstimadas.setText(String.valueOf(t.getHorasEstimadas()));
-			TxtHorasReales.setText(String.valueOf(t.getHorasReales()));
-			TxtIdEmpleado.setText(String.valueOf(t.getEmpleado().getDni()));
-			TxtEstado.setText(t.getEstado().stringifyEstado(t));
-			TxtIdProyecto.setText(String.valueOf(t.getProyecto().getId()));
+			TxtTitulo.setText(tarea.getTitulo());
+			TxtDescripcion.setText(tarea.getDescripcion());
+			TxtHorasEstimadas.setText(String.valueOf(tarea.getHorasEstimadas()));
+			TxtHorasReales.setText(String.valueOf(tarea.getHorasReales()));
+			TxtIdEmpleado.setText(String.valueOf(tarea.getEmpleado().getDni()));
+			TxtEstado.setText(tarea.getEstado().stringifyEstado(tarea));
+			TxtIdProyecto.setText(String.valueOf(tarea.getProyecto().getId()));
 		} catch (ServicioException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Tarea",
 			        JOptionPane.ERROR_MESSAGE);
@@ -167,27 +168,47 @@ public class FrmTarea extends JFrame implements ActionListener {
 			        JOptionPane.ERROR_MESSAGE);
 		} else {
 			try {
-				Tarea t = new Tarea();
+				if(tarea == null) tarea = new Tarea();
 				
-				t.setTitulo(TxtTitulo.getText());
-				t.setDescripcion(TxtDescripcion.getText());
-				t.setHorasEstimadas(Integer.parseInt(TxtHorasEstimadas.getText()));
-				t.setHorasReales(Integer.parseInt(TxtHorasReales.getText()));
+				//Asigno campos nuevos a la tarea
+				tarea.setTitulo(TxtTitulo.getText());
+				tarea.setDescripcion(TxtDescripcion.getText());
+				tarea.setHorasEstimadas(Integer.parseInt(TxtHorasEstimadas.getText()));
+				tarea.setHorasReales(Integer.parseInt(TxtHorasReales.getText()));
+
+				//Empleado
+				if(tarea.getEmpleado() == null) {
+					//Deberia ser un dropdown
+					tarea.asignarEmpleado(empleadoService.getById(Long.parseLong(TxtIdEmpleado.getText())));
+				}
+				if(tarea.getEmpleado().getDni() != Long.parseLong(TxtIdEmpleado.getText())){
+					Empleado emp = tarea.getEmpleado();
+					emp.setLibre(true);
+					empleadoService.modificar(emp);
+					tarea.asignarEmpleado(empleadoService.getById(Long.parseLong(TxtIdEmpleado.getText())));
+				}
+			
+				//Proyecto
 				//Deberia ser un dropdown
-				t.asignarEmpleado(empleadoService.getById(Long.parseLong(TxtIdEmpleado.getText())));
-				//Deberia ser un dropdown
-				t.setProyecto(proyectoService.getById(Long.parseLong(TxtIdProyecto.getText())));
+				tarea.setProyecto(proyectoService.getById(Long.parseLong(TxtIdProyecto.getText())));
 				
-				//El estado deberia ser un dropdown(iniciado,encurso..) y tener/guardar Timestamp. 
+				//Estado
 				parseEstado(TxtEstado.getText());
-				estadoService.crear(new Estado(t.getEmpleado(),iniciado,enCurso,finalizado));//Creo estado.
-				t.cambiarEstadoA(estadoService.listar().get(0));//Asigno el ultimo estado creado recien
+				if(tarea.getEstado() == null ||
+				tarea.getEstado().estaIniciado() != iniciado || 
+				tarea.getEstado().estaEnCurso() != enCurso || 
+				tarea.getEstado().estaFinalizado() != finalizado) {
+					//El estado deberia ser un dropdown(iniciado,encurso..) y tener/guardar Timestamp.
+					estadoService.crear(new Estado(tarea.getEmpleado(),iniciado,enCurso,finalizado));//Creo estado.
+					tarea.cambiarEstadoA(estadoService.listar().get(0));//Asigno el ultimo estado creado recien
+				}
+				//FIN de asignacion de campos nuevos a la tarea
 				
 				if(idTarea == -1) {
-					tareaService.crear(t);
+					tareaService.crear(tarea);
 				} else {
-					t.setId(idTarea);
-					tareaService.modificar(t);
+					tarea.setId(idTarea);
+					tareaService.modificar(tarea);
 				}
 				frm.cargarTabla();
 				this.setVisible(false);

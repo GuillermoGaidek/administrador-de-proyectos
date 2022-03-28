@@ -20,15 +20,18 @@ import com.sun.javafx.tk.Toolkit;
 
 import gui.BotoneraCrud;
 import logica.excepciones.ServicioException;
+import logica.model.Empleado;
 import logica.model.Estado;
 import logica.model.Tarea;
 import logica.service.GenericService;
+import persistencia.dao.EmpleadoDAOH2Impl;
 import persistencia.dao.EstadoDAOH2Impl;
 import persistencia.dao.TareaDAOH2Impl;
 
 public class FrmListadoTareas extends JFrame implements ActionListener {
 	
 	GenericService<Tarea> tareaService = new GenericService<Tarea>(new TareaDAOH2Impl());
+	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
 	private JTable tabla;
 	private TareaTableModel modelo;
 	private JScrollPane scrollPaneParaTabla;
@@ -105,6 +108,9 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 					long id = (long)this.tabla.getValueAt(fila, 0);
 					Tarea t = new Tarea();
 					t.setId(id);
+					Empleado emp = tareaService.getById(id).getEmpleado();
+					emp.setLibre(true);
+					empleadoService.modificar(emp);
 					tareaService.borrar(t);
 					cargarTabla();		
 				} else {
