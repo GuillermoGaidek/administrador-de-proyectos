@@ -1,18 +1,8 @@
-1)Manejo de errores poco descriptivo y mal nombre de parametros.
-
-2)Si modifico me va a decir que el empleado ya exsite, debido a esa misma linea.
-Ver de matchear con id o algo asi.
-
-3)Al borrar una tarea el empleado deberia quedar libre automagicamente.
-
-4)Manejar errores de constrains,como que no se puede borrar si es FK de otra entidad
-
-5)Error que da null es por esta linea que me salta al Exception general. Porque no existe el empleado me tira
-un nullPointerException. Eso porque no estoy manejadno bien los errores tipo LABO2.
-
+3)Cambiar en todos lados el id_tareas a Estado en vez de id_estado en tarea!
+En el modelo dejar el campo estado pero que lo saque de la tabla de estado.
+Ver si pasa lo mismo con empleado,etc.
 
 _______________________________________________________________________________________________________
-
 
 1)Fijarme cuando termine con las otras interfaces que me va a cambiar bastante lo que hice,
 ya que los empleados solo los voy a poder asignar a las tareas dependiendo de el proyecto ye eso..
@@ -22,3 +12,19 @@ ya que los empleados solo los voy a poder asignar a las tareas dependiendo de el
 3)Clase FrmTarea: terminar dropdowns en metodos comentados en actionPerformed.
 
 4)Agregar el tema de obtener las tareas y los empleados en el DAO de Proyecto.(En listar y getById)
+
+5)El estado del proyecto dependera del estado de sus tareas. 
+Se puedo asignar automagicamente dependiendo de las tareas.
+
+6)Manejo de errores poco descriptivo y mal nombre de parametros.
+Manejar bien los errores tipo LABO2.
+
+
+
+________________________________________DONE_______________________________________________________________
+
+1)Si modifico me va a decir que el empleado ya exsite, debido a esa misma linea.
+Ver de matchear con id o algo asi.
+
+2)Al borrar una tarea el empleado deberia quedar libre automagicamente.
+Si se modifica el anterior tambien quedara libre.

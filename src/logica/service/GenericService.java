@@ -9,9 +9,9 @@ import persistencia.dao.DAO;
 import persistencia.dao.EmpleadoDAOH2Impl;
 
 public class GenericService<T> {
-	DAO dao;
+	DAO<T> dao;
 
-	public GenericService(DAO dao) {
+	public GenericService(DAO<T> dao) {
 		this.dao = dao;
 	}
 
