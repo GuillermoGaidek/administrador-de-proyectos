@@ -10,7 +10,7 @@ public class DBManager {
 	private static final String DB_USERNAME = "sa";
 	private static final String DB_PASSWORD = "";
 	private static Connection c = null;
-	
+
 	public static Connection connect() {
 		try {
 			Class.forName(DB_DRIVER);
