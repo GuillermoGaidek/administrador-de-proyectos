@@ -25,9 +25,9 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 	@Override
 	public void crear(Tarea t) throws DAOException {
 		
-		String sql = "INSERT INTO TAREA (TITULO,DESCRIPCION,HORAS_ESTIMADAS,HORAS_REALES,ID_EMPLEADO,ID_ESTADO,ID_PROYECTO) VALUES " +
+		String sql = "INSERT INTO TAREA (TITULO,DESCRIPCION,HORAS_ESTIMADAS,HORAS_REALES,ID_EMPLEADO,ID_PROYECTO) VALUES " +
 		"('" + t.getTitulo() + "', '" + t.getDescripcion() + "', " + t.getHorasEstimadas() + ", " + t.getHorasReales() +
-		", " + t.getEmpleado().getDni() + ", " + t.getEstado().getId() + ", " + t.getProyecto().getId() + ")";
+		", " + t.getEmpleado().getDni() + ", " + t.getProyecto().getId() + ")";
 		
 		Connection c = DBManager.connect();
 		
@@ -80,7 +80,7 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 		
 		String sql = "UPDATE TAREA SET " + "TITULO='" + t.getTitulo() + "',DESCRIPCION='" + t.getDescripcion() + 
 						"',HORAS_ESTIMADAS=" + t.getHorasEstimadas() + ",HORAS_REALES=" + t.getHorasReales() + 
-						",ID_EMPLEADO=" + t.getEmpleado().getDni() + ",ID_ESTADO=" + t.getEstado().getId() +
+						",ID_EMPLEADO=" + t.getEmpleado().getDni() +
 						",ID_PROYECTO=" + t.getProyecto().getId() + " WHERE ID=" + t.getId();
 		
 		Connection c = DBManager.connect();
@@ -108,7 +108,7 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 	@Override
 	public List<Tarea> listar() throws DAOException {
 		List<Tarea> lista = new ArrayList<Tarea>();
-		String sql = "SELECT * FROM TAREA ORDER BY ID";
+		String sql = "SELECT T.*, E3.ID AS ID_ESTADO FROM TAREA T LEFT JOIN (SELECT E1.* FROM ESTADO E1 INNER JOIN  (SELECT MAX(E0.ID) AS ID FROM ESTADO E0 GROUP BY E0.ID_TAREA) E2 ON E1.ID = E2.ID) E3 ON T.ID = E3.ID_TAREA ORDER BY T.ID;";
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();
@@ -152,7 +152,7 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 	@Override
 	public Tarea getById(long id) throws DAOException {
 		Tarea tarea = new Tarea();
-		String sql = "SELECT * FROM TAREA WHERE ID=" + id;
+		String sql = "SELECT T.*, E3.ID AS ID_ESTADO FROM TAREA T LEFT JOIN (SELECT E1.* FROM ESTADO E1 INNER JOIN  (SELECT MAX(E0.ID) AS ID FROM ESTADO E0 GROUP BY E0.ID_TAREA) E2 ON E1.ID = E2.ID) E3 ON T.ID = E3.ID_TAREA WHERE T.ID = " + id + "ORDER BY T.ID;";
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();

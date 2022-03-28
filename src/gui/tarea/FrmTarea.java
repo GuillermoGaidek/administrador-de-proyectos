@@ -194,12 +194,13 @@ public class FrmTarea extends JFrame implements ActionListener {
 				
 				//Estado
 				parseEstado(TxtEstado.getText());
-				if(tarea.getEstado() == null ||
-				tarea.getEstado().estaIniciado() != iniciado || 
-				tarea.getEstado().estaEnCurso() != enCurso || 
-				tarea.getEstado().estaFinalizado() != finalizado) {
+				Estado estado = tarea.getEstado(); 
+				if(estado == null ||
+				estado.estaIniciado() != iniciado || 
+				estado.estaEnCurso() != enCurso || 
+				estado.estaFinalizado() != finalizado) {
 					//El estado deberia ser un dropdown(iniciado,encurso..) y tener/guardar Timestamp.
-					estadoService.crear(new Estado(tarea.getEmpleado(),iniciado,enCurso,finalizado));//Creo estado.
+					estadoService.crear(new Estado(tarea.getEmpleado(),iniciado,enCurso,finalizado,tarea.getId()));//Creo estado.
 					tarea.cambiarEstadoA(estadoService.listar().get(0));//Asigno el ultimo estado creado recien
 				}
 				//FIN de asignacion de campos nuevos a la tarea

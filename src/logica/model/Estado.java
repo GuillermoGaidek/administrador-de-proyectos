@@ -7,22 +7,25 @@ public class Estado {
 	private boolean finalizado;
 	private long id;
 	private Empleado modificadoPor;
+	private long idTarea;
 	
 	public Estado() {}
 	
-	public Estado(long id,Empleado modificadoPor,boolean iniciado,boolean enCurso,boolean finalizado) {
+	public Estado(long id,Empleado modificadoPor,boolean iniciado,boolean enCurso,boolean finalizado,long idTarea) {
 		this.id = id;
 		this.modificadoPor = modificadoPor;
 		this.iniciado = iniciado; 
 		this.enCurso = enCurso;
 		this.finalizado = finalizado;
+		this.idTarea = idTarea;
 	}
 	
-	public Estado(Empleado modificadoPor,boolean iniciado,boolean enCurso,boolean finalizado) {
+	public Estado(Empleado modificadoPor,boolean iniciado,boolean enCurso,boolean finalizado,long idTarea) {
 		this.modificadoPor = modificadoPor;
 		this.iniciado = iniciado; 
 		this.enCurso = enCurso;
 		this.finalizado = finalizado;
+		this.idTarea = idTarea;
 	}
 	
 	public String stringifyEstado(Tarea t) {
@@ -46,6 +49,10 @@ public class Estado {
 	
 	public Empleado getModificadoPor() {
 		return modificadoPor;
+	}
+	
+	public long getIdTarea() {
+		return idTarea;
 	}
 
 	public boolean estaIniciado() {

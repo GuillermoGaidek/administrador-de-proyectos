@@ -20,9 +20,10 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 	@Override
 	public void crear(Estado estado) throws DAOException {
 		
-		String sql = "INSERT INTO ESTADO (ID_EMPLEADO,INICIADO,EN_CURSO,FINALIZADO) VALUES " +
+		String sql = "INSERT INTO ESTADO (ID_EMPLEADO,INICIADO,EN_CURSO,FINALIZADO,ID_TAREA) VALUES " +
 						"(" + estado.getModificadoPor().getDni() + ", " + estado.estaIniciado() + ", " +
-						estado.estaEnCurso() + ", " + estado.estaFinalizado() + ")";
+						estado.estaEnCurso() + ", " + estado.estaFinalizado() + ", " +
+						estado.getIdTarea() + ")";
 		
 		Connection c = DBManager.connect();
 		
@@ -87,7 +88,7 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 			while (rs.next()) {
 				Estado estado = new Estado(rs.getLong("ID"),empleadoService.getById(rs.getLong("ID_EMPLEADO")),
 											rs.getBoolean("INICIADO"),rs.getBoolean("EN_CURSO"),
-											rs.getBoolean("FINALIZADO"));
+											rs.getBoolean("FINALIZADO"),rs.getLong("ID_TAREA"));
 				lista.add(estado);
 			}
 		} catch (SQLException e) {
@@ -120,7 +121,8 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 
 			if (rs.next()) {
 				estado = new Estado(rs.getLong("ID"),empleadoService.getById(rs.getLong("ID_EMPLEADO")),
-						rs.getBoolean("INICIADO"),rs.getBoolean("EN_CURSO"),rs.getBoolean("FINALIZADO"));
+						rs.getBoolean("INICIADO"),rs.getBoolean("EN_CURSO"),rs.getBoolean("FINALIZADO"),
+						rs.getLong("ID_TAREA"));
 			}
 
 		} catch (SQLException e) {
