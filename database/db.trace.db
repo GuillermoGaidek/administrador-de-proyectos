@@ -15195,3 +15195,53 @@ Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection wa
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:622)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
 	... 25 more
+2022-03-28 00:09:30 jdbc[9]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-200]
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.message.DbException.get(DbException.java:170)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:245)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:186)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:152)
+	at org.h2.Driver.connect(Driver.java:69)
+	at java.sql.DriverManager.getConnection(DriverManager.java:664)
+	at java.sql.DriverManager.getConnection(DriverManager.java:247)
+	at persistencia.jdbc.DBManager.connect(DBManager.java:24)
+	at persistencia.dao.ProyectoDAOH2Impl.getById(ProyectoDAOH2Impl.java:135)
+	at persistencia.dao.ProyectoDAOH2Impl.getById(ProyectoDAOH2Impl.java:1)
+	at logica.service.GenericService.getById(GenericService.java:63)
+	at persistencia.dao.TareaDAOH2Impl.listar(TareaDAOH2Impl.java:124)
+	at logica.service.GenericService.listar(GenericService.java:51)
+	at gui.tarea.FrmListadoTareas.cargarTabla(FrmListadoTareas.java:83)
+	at gui.tarea.FrmListadoTareas.GetPanelPrincipal(FrmListadoTareas.java:71)
+	at gui.tarea.FrmListadoTareas.<init>(FrmListadoTareas.java:50)
+	at logica.main.Main.main(Main.java:8)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:622)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	... 19 more
+2022-03-28 00:10:14 jdbc[9]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-200]
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.message.DbException.get(DbException.java:170)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:245)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:186)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:152)
+	at org.h2.Driver.connect(Driver.java:69)
+	at java.sql.DriverManager.getConnection(DriverManager.java:664)
+	at java.sql.DriverManager.getConnection(DriverManager.java:247)
+	at persistencia.jdbc.DBManager.connect(DBManager.java:24)
+	at persistencia.dao.ProyectoDAOH2Impl.getById(ProyectoDAOH2Impl.java:135)
+	at persistencia.dao.ProyectoDAOH2Impl.getById(ProyectoDAOH2Impl.java:1)
+	at logica.service.GenericService.getById(GenericService.java:63)
+	at persistencia.dao.TareaDAOH2Impl.listar(TareaDAOH2Impl.java:124)
+	at logica.service.GenericService.listar(GenericService.java:51)
+	at gui.tarea.FrmListadoTareas.cargarTabla(FrmListadoTareas.java:83)
+	at gui.tarea.FrmListadoTareas.GetPanelPrincipal(FrmListadoTareas.java:71)
+	at gui.tarea.FrmListadoTareas.<init>(FrmListadoTareas.java:50)
+	at logica.main.Main.main(Main.java:8)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:622)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	... 19 more
