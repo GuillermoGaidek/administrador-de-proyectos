@@ -11,7 +11,9 @@ ya que los empleados solo los voy a poder asignar a las tareas dependiendo de el
 5)El estado del proyecto dependera del estado de sus tareas. 
 Se puedo asignar automagicamente dependiendo de las tareas.
 
-6)Manejo de errores poco descriptivo y mal nombre de parametros.
+6)Mostrar el historial de estados de las tareas.. 
+
+7)Manejo de errores poco descriptivo y mal nombre de parametros.
 Manejar bien los errores tipo LABO2.
 
 

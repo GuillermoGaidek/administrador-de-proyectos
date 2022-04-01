@@ -1,12 +1,3 @@
-Ver tema de los Proyectos.. donde se asignan , empleados o tarea?
-Terminar gui (abstraer componentes lo mas q peuda,hasta forzarlo)
-
-----------------------------------------
-
-chequear como se imprimen los proyectos,tareas,empleados,etc.
-PreparedStatement?mejoraria algo?
-
---------------------------------------------------------------------------------
 
 ALTER TABLE TAREAS RENAME TO TAREA
 ALTER TABLE TAREAS ADD COLUMN ESTADO INTEGER
@@ -22,6 +13,8 @@ CREATE TABLE ESTADO_EN_CURSO (ID BIGINT PRIMARY KEY AUTO_INCREMENT, EMPLEADO BIG
 ALTER TABLE TEST ALTER COLUMN ID RESTART WITH 10000;
 ALTER TABLE PROYECTO DROP COLUMN ID
 ALTER TABLE PROYECTO ADD COLUMN ID BIGINT PRIMARY KEY AUTO_INCREMENT
+
+ALTER TABLE ESTADO ALTER COLUMN ID RESTART WITH 1
 
 CREATE TABLE TAREA (
 ID BIGINT PRIMARY KEY AUTO_INCREMENT,
