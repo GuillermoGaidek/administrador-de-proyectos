@@ -192,4 +192,36 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 		}
 		return tarea;
 	}
+	
+	public long getLastId() throws DAOException {
+		
+		String sql = "SELECT MAX(ID) AS ID FROM TAREA";
+		long lastId = 0;
+		Connection c = DBManager.connect();
+		
+		try {
+			Statement s = c.createStatement();
+			ResultSet rs = s.executeQuery(sql);
+			
+			if (rs.next()) lastId = rs.getLong("ID");
+			
+		} catch (SQLException e) {
+			try {
+				c.rollback();
+				throw new DAOException("Error al guardar en la BD, rollback realizado", e);
+			} catch (SQLException e1) {
+				throw new DAOException("Error al guardar en la BD y rollback no realizado", e1);
+			}
+		} finally {
+			try {
+				DBManager.close();
+			} catch (SQLException e) {
+				throw new DAOException("Error al cerrar la conexion de la BD", e);
+			}
+		}
+		
+		return lastId;
+	}
+	
+	
 }
