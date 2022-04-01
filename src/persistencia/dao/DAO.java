@@ -11,4 +11,5 @@ public interface DAO<T> {
     public void modificar(T a) throws DAOException;
     public List<T> listar() throws DAOException;
     public T getById(long id) throws DAOException;
+    public long getLastId() throws DAOException;
 }

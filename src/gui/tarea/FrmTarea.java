@@ -199,7 +199,7 @@ public class FrmTarea extends JFrame implements ActionListener {
 				if(estado == null || estado.estaIniciado() != iniciado || 
 				estado.estaEnCurso() != enCurso || 
 				estado.estaFinalizado() != finalizado) {
-					long newTareaId = tareaService.
+					long newTareaId = tareaService.getLastId() + 1;//obtengo ultimo id de tarea y le sumo uno para hacer la FK de ESTADO
 					
 					//El estado deberia ser un dropdown(iniciado,encurso..) y tener/guardar Timestamp.
 					estadoService.crear(new Estado(tarea.getEmpleado(),iniciado,enCurso,finalizado,newTareaId));//Creo estado.

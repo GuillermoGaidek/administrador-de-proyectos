@@ -167,6 +167,11 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 		}
 		return empleado;
 	}
+	
+	@Override
+	public long getLastId() {return 0;}
+	
+	
 }
 
 

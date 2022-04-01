@@ -144,4 +144,6 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 		return estado;
 	}
 	
+	@Override
+	public long getLastId() {return 0;}
 }

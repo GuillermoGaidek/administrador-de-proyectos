@@ -158,4 +158,7 @@ public class ProyectoDAOH2Impl implements DAO<Proyecto> {
 		return proyecto;
 	}
 		
+	@Override
+	public long getLastId() {return 0;}
+	
 }

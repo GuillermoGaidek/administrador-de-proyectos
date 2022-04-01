@@ -68,4 +68,18 @@ public class GenericService<T> {
 		}
     	return objetoDao;
     }
+    
+    public long getLastId() throws ServicioException {
+    	long lastId = 0;
+    	try {
+    		lastId = dao.getLastId();
+		} catch (DAOException e) {
+			System.out.println(e.getMessage());
+        	e.printStackTrace();
+			throw new ServicioException("Hubo un error en la BD al obtener el registro", e);
+		}
+    	return lastId;
+    }
+    
+    
 }
