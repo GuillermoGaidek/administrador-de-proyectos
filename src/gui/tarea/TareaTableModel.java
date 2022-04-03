@@ -22,10 +22,10 @@ public class TareaTableModel extends AbstractTableModel {
 	private List<Tarea> filas;
 	
 	private String[] nombresColumnas = {"Id","Titulo", "Descripcion", "Horas Estimadas", "Horas Reales",
-										"Id Empleado","Id Estado","Id Proyecto"};
+										"Empleado","Estado","Proyecto"};
 	
-	private Class[] tiposColumnas = {Integer.class, String.class, String.class, Integer.class, Integer.class,
-									 Integer.class,Integer.class,Integer.class};
+	private Class[] tiposColumnas = {Long.class, String.class, String.class, Integer.class, Integer.class,
+									 Long.class,Long.class,Long.class};
 	
 	public TareaTableModel() {
 		filas = new ArrayList<Tarea>();
@@ -80,7 +80,7 @@ public class TareaTableModel extends AbstractTableModel {
 			result = T.getEstado().stringifyEstado(T);
 			break;
 		case COLUMNA_ID_PROYECTO:
-			result = T.getProyecto().getId();
+			result = T.getProyecto().getTitulo();
 			break;
 		default:
 			result = new String("");

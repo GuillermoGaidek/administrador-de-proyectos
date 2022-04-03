@@ -37,14 +37,17 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 	private JScrollPane scrollPaneParaTabla;
 	private JLabel LblTitulo;
 	private BotoneraCrud botoneraCrud = new BotoneraCrud();
+	private long idProyecto;
 	
-	public FrmListadoTareas() {
+	public FrmListadoTareas(long idProyecto) {
+		// asigna el proyecto seleccionado
+		this.idProyecto = idProyecto;
 		
 		// setea titulo ventana
 		this.setTitle("Tarea");
 
 		// se cierra la ventana al hacer click en el boton X
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
 		// setear panel de la ventana
 		this.setContentPane(GetPanelPrincipal());
@@ -80,7 +83,7 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 	public void cargarTabla() {
 		List<Tarea> lista;
 		try {
-			lista = tareaService.listar();
+			lista = tareaService.listarById(idProyecto);
 			modelo.setFilas(lista);
 			modelo.fireTableDataChanged();	
 		} catch (ServicioException ex) {
@@ -123,4 +126,5 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 			}
 		}
 	}
+	
 }

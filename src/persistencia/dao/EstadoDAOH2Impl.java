@@ -10,6 +10,7 @@ import logica.excepciones.DAOException;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
 import logica.model.Estado;
+import logica.model.Proyecto;
 import logica.service.GenericService;
 import persistencia.jdbc.DBManager;
 
@@ -109,6 +110,9 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 		}
 		return lista;
 	}
+	
+	@Override
+	public List<Estado> listarById(long id) {return new ArrayList();}
 
 	@Override
 	public Estado getById(long id) throws DAOException {

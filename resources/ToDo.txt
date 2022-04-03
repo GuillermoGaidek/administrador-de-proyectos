@@ -1,6 +1,5 @@
 
-1)Fijarme cuando termine con las otras interfaces que me va a cambiar bastante lo que hice,
-ya que los empleados solo los voy a poder asignar a las tareas dependiendo de el proyecto ye eso..
+1)PROYECTO: Ver logica al borrar proyecto. Hacer pantalla empleado
 
 2)Agregar Timestamp para la clase Estado y en BD.
 	

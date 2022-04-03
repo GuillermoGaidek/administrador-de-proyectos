@@ -10,7 +10,9 @@ import logica.excepciones.DAOException;
 import logica.excepciones.EmpleadoNoDisponibleException;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
+import logica.model.Estado;
 import logica.model.Proyecto;
+import logica.model.Tarea;
 import logica.service.GenericService;
 import persistencia.jdbc.DBManager;
 
@@ -104,6 +106,40 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 	public List<Empleado> listar() throws DAOException {
 		List<Empleado> lista = new ArrayList<Empleado>();
 		String sql = "SELECT * FROM EMPLEADO;";
+		Connection c = DBManager.connect();
+		try {
+			Statement s = c.createStatement();
+			ResultSet rs = s.executeQuery(sql);
+
+			while (rs.next()) {
+				Proyecto proyecto = proyectoService.getById(rs.getLong("ID_PROYECTO"));
+				Empleado empleado = new Empleado(rs.getLong("DNI"), rs.getInt("COSTO_POR_HORA"),proyecto);
+				empleado.setLibre(rs.getBoolean("LIBRE"));
+				lista.add(empleado);
+			}
+		} catch (SQLException e) {
+			try {
+				c.rollback();
+				throw new DAOException("Error al obtener lista de tareas de la BD, rollback realizado", e);
+			} catch (SQLException e1) {
+				throw new DAOException("Error al obtener lista de tareas de la BD, rollback no realizado", e1);
+			}
+		} catch (ServicioException se) {
+			throw new DAOException("Error en el servicio al obtener lista de Tareas de la BD", se);
+		} finally {
+			try {
+				DBManager.close();
+			} catch (SQLException e) {
+				throw new DAOException("Error al cerrar la conexion de la BD", e);
+			}
+		}
+		return lista;
+	}
+	
+	@Override
+	public List<Empleado> listarById(long idProyecto) throws DAOException {
+		List<Empleado> lista = new ArrayList<Empleado>();
+		String sql = "SELECT * FROM EMPLEADO WHERE ID_PROYECTO = " + idProyecto + ";";
 		Connection c = DBManager.connect();
 		try {
 			Statement s = c.createStatement();

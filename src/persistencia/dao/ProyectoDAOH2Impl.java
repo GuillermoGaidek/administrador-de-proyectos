@@ -73,8 +73,8 @@ public class ProyectoDAOH2Impl implements DAO<Proyecto> {
 	@Override
 	public void modificar(Proyecto p) throws DAOException {
 		
-		String sql = "UPDATE PROYECTO SET TITULO='" + p.getTitulo()  +
-						" WHERE ID=" + p.getId();
+		String sql = "UPDATE PROYECTO SET TITULO = '" + p.getTitulo()  +
+						"' WHERE ID = " + p.getId();
 		
 		Connection c = DBManager.connect();
 		try {
@@ -127,6 +127,9 @@ public class ProyectoDAOH2Impl implements DAO<Proyecto> {
 		}
 		return lista;
 	}
+	
+	@Override
+	public List<Proyecto> listarById(long id) {return new ArrayList();}
 
 	@Override
 	public Proyecto getById(long id) throws DAOException {

@@ -56,6 +56,18 @@ public class GenericService<T> {
 		}
         return objetoDao;
     }
+    
+    public List<T> listarById(long idProyecto) throws ServicioException {
+    	List<T> objetoDao = null;
+        try {
+        	objetoDao = dao.listarById(idProyecto);
+		} catch (DAOException e) {
+			System.out.println(e.getMessage());
+        	e.printStackTrace();
+			throw new ServicioException("Hubo un error en la BD al obtener los datos", e);
+		}
+        return objetoDao;
+    }
 
     public T getById(long id) throws ServicioException {
     	T objetoDao = null;
