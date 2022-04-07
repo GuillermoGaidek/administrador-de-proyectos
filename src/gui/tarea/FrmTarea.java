@@ -163,7 +163,11 @@ public class FrmTarea extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(TxtTitulo.getText().isEmpty() || TxtDescripcion.getText().isEmpty() || TxtHorasEstimadas.getText().isEmpty() || TxtHorasReales.getText().isEmpty()) {
+		if(TxtTitulo.getText().isEmpty() || 
+		TxtDescripcion.getText().isEmpty() || 
+		TxtHorasEstimadas.getText().isEmpty() || 
+		TxtHorasReales.getText().isEmpty() ||
+		TxtIdEmpleado.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacios. Vuelva a intentar nuevamente", "Tarea",
 			        JOptionPane.ERROR_MESSAGE);
 		} else {
@@ -177,17 +181,8 @@ public class FrmTarea extends JFrame implements ActionListener {
 				tarea.setHorasReales(Integer.parseInt(TxtHorasReales.getText()));
 
 				//Empleado
-				if(tarea.getEmpleado() == null) {
-					//Deberia ser un dropdown
-					tarea.asignarEmpleado(empleadoService.getById(Long.parseLong(TxtIdEmpleado.getText())));
-				}
-				if(tarea.getEmpleado().getDni() != Long.parseLong(TxtIdEmpleado.getText())){
-					Empleado emp = tarea.getEmpleado();
-					emp.setLibre(true);
-					empleadoService.modificar(emp);
-					tarea.asignarEmpleado(empleadoService.getById(Long.parseLong(TxtIdEmpleado.getText())));
-				}
-			
+				tarea.asignarEmpleado(empleadoService.getById(Long.parseLong(TxtIdEmpleado.getText())));
+				
 				//Proyecto
 				//Deberia ser un dropdown
 				tarea.setProyecto(proyectoService.getById(Long.parseLong(TxtIdProyecto.getText())));

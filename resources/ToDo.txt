@@ -1,20 +1,33 @@
+1)Tanto en crear proyecto como en asignar o desasignar empleado al ver el proyecto crear
+botonera con logica para ir agregando los empleados libres del pool. Con un boton on +
+que agregue mas Jlbl.
 
-1)PROYECTO: Ver logica al borrar proyecto. Hacer pantalla empleado
+2)Unificar VerTarea y VerEMpleados en un boton que sea Ver Proyecto. Este sera un Jpanel
+dividido en SOuth y North con la pantallita de  empleados y tareas.
+La parte de empleado deberia tener un boton de asignar o desasignar.
 
-2)Agregar Timestamp para la clase Estado y en BD.
+3)Agregar pantalla de pool con todos los empleados. Aca se agregan borra o modifican empleados.
+
+4)Ver todas las relaciones de empleado<-> proyecto posibles.
+
+5)Ver logica al borrar proyecto, que pida confirmacion si tiene tareas en curso y empelados queden libres y tareas borradas.
+
+6)Al agregar tarea que se agregue directamente el proyecto seleccionado.
+Se podria agregar a otro q no sea en el que estoy parado
+
+7)No se puede cambiar empleado de proyecto si tiene tarea asignada, al igual que no se puede
+cambiar tarea de proyecto si tiene empleado asignado de ese proyecto.
+
+8)Agregar Timestamp para la clase Estado y en BD.
 	
-3)Clase FrmTarea: terminar dropdowns en metodos comentados en actionPerformed.
+9)Clase FrmTarea: terminar dropdowns en metodos comentados en actionPerformed.
 
-4)Agregar el tema de obtener las tareas y los empleados en el DAO de Proyecto.(En listar y getById)
+10)Mostrar el historial de estados de las tareas.. 
 
-5)El estado del proyecto dependera del estado de sus tareas. 
-Se puedo asignar automagicamente dependiendo de las tareas.
-
-6)Mostrar el historial de estados de las tareas.. 
-
-7)Manejo de errores poco descriptivo y mal nombre de parametros.
+11)Manejo de errores poco descriptivo y mal nombre de parametros.
 Manejar bien los errores tipo LABO2.
 
+12) Q&A de campos null y refactorizar para no repetir codigo.
 
 
 
@@ -24,13 +37,7 @@ Manejar bien los errores tipo LABO2.
 
 
 
-________________________________________DONE_______________________________________________________________
+------------------------------------------------------------------------
+1)EL ESTADO NO LO DEBERIA PODER CAMBIAR. QUE SEA UN Jlbl.
 
-1)Si modifico me va a decir que el empleado ya exsite, debido a esa misma linea.
-Ver de matchear con id o algo asi.
-
-2)Al borrar una tarea el empleado deberia quedar libre automagicamente.
-Si se modifica el anterior tambien quedara libre.
-
-3)Cambiar en todos lados el id_tareas a Estado en vez de id_estado en tarea!
-En el modelo dejar el campo estado pero que lo saque de la tabla de estado.
+2)Empleado puede tener mas de una tarea. Cambiar logica de ocupado dependeinedo el proyecto y no la tarea.

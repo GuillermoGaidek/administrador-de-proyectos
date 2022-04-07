@@ -1,16 +1,32 @@
 package logica.model;
 
+import logica.excepciones.EmpleadoNoDisponibleException;
+import logica.excepciones.ServicioException;
+import logica.service.GenericService;
+import persistencia.dao.EmpleadoDAOH2Impl;
+
 public class Empleado {
 	
-	private final long dni;
-	private long costoPorHora;
-	private boolean libre = true;
-	private Proyecto proyecto;
+	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
 	
-	public Empleado(long dni, long costoPorHora,Proyecto proyecto) {
+	private long dni;
+	private long costoPorHora;
+	private boolean libre = true; //se manjea automaticamente
+	private Proyecto proyecto = null;
+	
+	public Empleado() {}
+	
+	public Empleado(long dni, long costoPorHora,Proyecto proyecto,boolean persistir) throws EmpleadoNoDisponibleException, ServicioException {
+		if(proyecto != null) asignarProyectoNuevo(proyecto,persistir);
 		this.dni = dni;
 		this.costoPorHora = costoPorHora;
+	}
+	
+	public void asignarProyectoNuevo(Proyecto proyecto,boolean persistir) throws EmpleadoNoDisponibleException, ServicioException {
+		if (!this.libre) throw new EmpleadoNoDisponibleException("El empleado ya esta ocupado");
+		this.libre = false;
 		this.proyecto = proyecto;
+		if(persistir)empleadoService.modificar(this);
 	}
 	
 	public long getCostoPorHora() {
@@ -31,6 +47,10 @@ public class Empleado {
 	
 	public long getDni() {
 		return dni;
+	}
+	
+	public void setDni(long dni) {
+		this.dni = dni;
 	}
 	
 	public Proyecto getProyecto() {

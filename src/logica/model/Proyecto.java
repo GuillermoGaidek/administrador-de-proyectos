@@ -22,18 +22,6 @@ public class Proyecto {
 		this.titulo = titulo;
 	}
 	
-	public void agregarTarea(Tarea t) {
-		this.tareas.add(t);
-	}
-	
-	public void eliminarTarea(Tarea t) {
-		this.tareas.remove(t);
-	}
-	
-	public List<Tarea> getTareas() {
-		return tareas;
-	}
-	
 	public void agregarEmpleado(Empleado e) {
 		this.empleados.add(e);
 	}
@@ -42,8 +30,28 @@ public class Proyecto {
 		this.empleados.remove(e);
 	}
 	
-	public List<Empleado> getEmpleados() {
+	public List<Empleado> getListaEmpleados() {
 		return empleados;
+	}
+	
+	public void setListaEmpleados(List<Empleado> empleados) {
+		this.empleados = empleados;
+	}
+	
+	public void agregarTarea(Tarea t) {
+		this.tareas.add(t);
+	}
+	
+	public void eliminarTarea(Tarea t) {
+		this.tareas.remove(t);
+	}
+	
+	public List<Tarea> getListaTareas() {
+		return tareas;
+	}
+	
+	public void setListaTareas(List<Tarea> tareas) {
+		this.tareas = tareas;
 	}
 
 	public String getTitulo() {

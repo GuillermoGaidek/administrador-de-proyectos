@@ -34,7 +34,9 @@ public class FrmProyecto  extends JFrame implements ActionListener {
 		
 	private JLabel LblTituloVentana;
 	private JLabel LblTitulo;	
+	private JLabel LblEmpleado;
 	private JTextField TxtTitulo;
+	private JTextField TxtEmpleado;
 	private JButton BtnGuardar;
 	private FrmListadoProyectos frm;
 	private long idProyecto;
@@ -106,7 +108,7 @@ public class FrmProyecto  extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(TxtTitulo.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacios. Vuelva a intentar nuevamente", "Tarea",
+			JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacios. Vuelva a intentar nuevamente", "Proyecto",
 			        JOptionPane.ERROR_MESSAGE);
 		} else {
 			try {

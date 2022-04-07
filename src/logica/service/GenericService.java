@@ -21,7 +21,7 @@ public class GenericService<T> {
         } catch (DAOException e) {
         	System.out.println(e.getMessage());
         	e.printStackTrace();
-            throw new ServicioException("Hubo un error en la BD al guardar el registro", e);
+            throw new ServicioException("Hubo un error en la BD al guardar el registro: " + e.getMessage(), e);
         }
     }
 
@@ -31,7 +31,7 @@ public class GenericService<T> {
 		} catch (DAOException e) {
 			System.out.println(e.getMessage());
         	e.printStackTrace();
-			throw new ServicioException("Hubo un error en la BD al borrar el registro", e);
+			throw new ServicioException("Hubo un error en la BD al guardar el registro: " + e.getMessage(), e);
 		}
     }
 
@@ -41,7 +41,7 @@ public class GenericService<T> {
 		} catch (DAOException e) {
 			System.out.println(e.getMessage());
         	e.printStackTrace();
-			throw new ServicioException("Hubo un error en la BD al modificar el registro", e);
+			throw new ServicioException("Hubo un error en la BD al guardar el registro: " + e.getMessage(), e);
 		}
     }
 
@@ -52,7 +52,7 @@ public class GenericService<T> {
 		} catch (DAOException e) {
 			System.out.println(e.getMessage());
         	e.printStackTrace();
-			throw new ServicioException("Hubo un error en la BD al obtener los datos", e);
+			throw new ServicioException("Hubo un error en la BD al guardar el registro: " + e.getMessage(), e);
 		}
         return objetoDao;
     }
@@ -64,7 +64,7 @@ public class GenericService<T> {
 		} catch (DAOException e) {
 			System.out.println(e.getMessage());
         	e.printStackTrace();
-			throw new ServicioException("Hubo un error en la BD al obtener los datos", e);
+			throw new ServicioException("Hubo un error en la BD al guardar el registro: " + e.getMessage(), e);
 		}
         return objetoDao;
     }
@@ -76,7 +76,7 @@ public class GenericService<T> {
 		} catch (DAOException e) {
 			System.out.println(e.getMessage());
         	e.printStackTrace();
-			throw new ServicioException("Hubo un error en la BD al obtener el registro", e);
+			throw new ServicioException("Hubo un error en la BD al guardar el registro: " + e.getMessage(), e);
 		}
     	return objetoDao;
     }
@@ -88,7 +88,7 @@ public class GenericService<T> {
 		} catch (DAOException e) {
 			System.out.println(e.getMessage());
         	e.printStackTrace();
-			throw new ServicioException("Hubo un error en la BD al obtener el registro", e);
+			throw new ServicioException("Hubo un error en la BD al guardar el registro: " + e.getMessage(), e);
 		}
     	return lastId;
     }

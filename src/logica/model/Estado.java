@@ -41,7 +41,7 @@ public class Estado {
 		}
 		
 		return estado;
-	}	
+	}
 	
 	public long getId() {
 		return id;

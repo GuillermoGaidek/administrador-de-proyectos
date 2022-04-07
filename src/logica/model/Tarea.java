@@ -20,8 +20,8 @@ public class Tarea {
 	public Tarea() {}
 	
 	public Tarea(long id, String titulo, String descripcion, int horasEstimadas,int horasReales,
-				 Empleado empleado,Estado estado,Proyecto proyecto) throws EmpleadoNoDisponibleException, ServicioException {
-		asignarEmpleado(empleado);
+				 Empleado empleado,Estado estado,Proyecto proyecto) {
+		this.empleado = empleado;
 		this.estado = estado;
 		this.proyecto = proyecto;
 		this.id = id;
@@ -31,11 +31,8 @@ public class Tarea {
 		this.horasReales = horasReales;
 	}
 
-	public void asignarEmpleado(Empleado empleado) throws EmpleadoNoDisponibleException, ServicioException {
-		if (!empleado.estaLibre()) throw new EmpleadoNoDisponibleException("El empleado ya esta ocupado");
+	public void asignarEmpleado(Empleado empleado) {
 		this.empleado = empleado;
-		this.empleado.setLibre(false);
-		empleadoService.modificar(this.empleado);
 	}
 	
 	public Empleado getEmpleado() {

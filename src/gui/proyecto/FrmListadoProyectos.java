@@ -1,6 +1,7 @@
 package gui.proyecto;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
 import gui.BotoneraCrud;
+import gui.empleado.FrmListadoEmpleados;
 import gui.tarea.FrmListadoTareas;
 import gui.tarea.FrmTarea;
 import gui.tarea.TareaTableModel;
@@ -37,11 +39,12 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 	private JLabel LblTitulo;
 	private BotoneraCrud botoneraCrud = new BotoneraCrud();
 	JButton botonVerTareas;
+	JButton botonVerEmpleados;
 	
 	public FrmListadoProyectos() {
 		
 		// setea titulo ventana
-		this.setTitle("Proyecto");
+		this.setTitle("Proyectos");
 
 		// se cierra la ventana al hacer click en el boton X
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,22 +67,28 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 		JPanel panel = new JPanel(new BorderLayout());
 		
 		LblTitulo = new JLabel("Listado de proyectos", SwingConstants.CENTER);
+		
 		panel.add(LblTitulo, BorderLayout.NORTH);
 		
 		modelo = new ProyectoTableModel();
 		tabla = new JTable(modelo);
 		cargarTabla();
 		scrollPaneParaTabla = new JScrollPane(tabla);
+		
 		panel.add(scrollPaneParaTabla, BorderLayout.CENTER);
 		
 		
-		JPanel panelSouth = new JPanel(new BorderLayout());
-		panelSouth.add(botoneraCrud.GetPanelBotones(this), BorderLayout.EAST);
-		botonVerTareas = new JButton("VerTareas");
+		JPanel panelSouth = new JPanel(new FlowLayout());
+		botonVerTareas = new JButton("Ver Tareas");
 		botonVerTareas.addActionListener(this);
-		panelSouth.add(botonVerTareas,BorderLayout.WEST);
+		panelSouth.add(botonVerTareas);
+		botonVerEmpleados = new JButton("Ver Empleados");
+		botonVerEmpleados.addActionListener(this);
+		panelSouth.add(botonVerEmpleados);
+		panelSouth.add(botoneraCrud.GetPanelBotones(this));
 		
 		panel.add(panelSouth, BorderLayout.SOUTH);
+		
 		return panel;
 	}
 	
@@ -134,7 +143,15 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 				JOptionPane.showMessageDialog(this, "No selecciono ningun proyecto", "Ver Tareas",
 				        JOptionPane.ERROR_MESSAGE);
 			}
-			
+		} else if(e.getSource() == botonVerEmpleados) {
+			if(this.tabla.getSelectedRow() != -1) {
+				fila = this.tabla.getSelectedRow();
+				long id = (long)this.tabla.getValueAt(fila, 0);
+				new FrmListadoEmpleados(id);
+			} else {
+				JOptionPane.showMessageDialog(this, "No selecciono ningun proyecto", "Ver Empleados",
+				        JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 	

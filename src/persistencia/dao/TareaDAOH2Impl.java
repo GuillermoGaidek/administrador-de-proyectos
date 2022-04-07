@@ -137,8 +137,6 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 			}
 		} catch (ServicioException se) {
 			throw new DAOException("Error en el servicio al obtener lista de Tareas de la BD", se);
-		} catch (EmpleadoNoDisponibleException se) {
-			throw new DAOException("Error al obtener lista de Tareas de la BD", se);
 		} finally {
 			try {
 				DBManager.close();
@@ -181,8 +179,6 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 			}
 		} catch (ServicioException se) {
 			throw new DAOException("Error en el servicio al obtener lista de Tareas de la BD", se);
-		} catch (EmpleadoNoDisponibleException se) {
-			throw new DAOException("Error al obtener lista de Tareas de la BD", se);
 		} finally {
 			try {
 				DBManager.close();
@@ -225,8 +221,6 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 			}
 		} catch (ServicioException se) {
 			throw new DAOException("Error en el servicio al obtener lista de Tareas de la BD", se);
-		} catch (EmpleadoNoDisponibleException se) {
-			throw new DAOException("Error al obtener lista de Tareas de la BD", se);
 		} finally {
 			try {
 				DBManager.close();
