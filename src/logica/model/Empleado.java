@@ -62,6 +62,15 @@ public class Empleado {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		Empleado emp = (Empleado)obj;
+		if (this.dni == emp.dni) return true;
+	    return false;
+	}
+	
+	@Override
 	public String toString() {
 		return "Empleado [dni=" + dni + ", costoPorHora=" + costoPorHora + ", libre=" + libre + ", proyecto=" + proyecto
 				+ "]";

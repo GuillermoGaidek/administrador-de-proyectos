@@ -1,20 +1,28 @@
 package gui.proyecto;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import gui.AsignacionEmpleados;
+import gui.empleado.EmpleadoTableModel;
 import gui.tarea.FrmListadoTareas;
+import logica.excepciones.EmpleadoNoDisponibleException;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
 import logica.model.Estado;
@@ -34,13 +42,19 @@ public class FrmProyecto  extends JFrame implements ActionListener {
 		
 	private JLabel LblTituloVentana;
 	private JLabel LblTitulo;	
+	private JLabel LblTituloEmpleados;
 	private JLabel LblEmpleado;
 	private JTextField TxtTitulo;
 	private JTextField TxtEmpleado;
+	private JTable tabla;
+	private EmpleadoTableModel modelo;
+	private JScrollPane scrollPaneParaTabla;
 	private JButton BtnGuardar;
+	private JButton BtnAsignacionEmpleados;
 	private FrmListadoProyectos frm;
 	private long idProyecto;
 	Proyecto proyecto;
+	List<Empleado> ListaEmpleados = new ArrayList<Empleado>();
 	
 	public FrmProyecto(long idProyecto, FrmListadoProyectos frm) {
 
@@ -70,6 +84,46 @@ public class FrmProyecto  extends JFrame implements ActionListener {
 		}
 	}
 	
+	private JPanel GetPanelPrincipal() {
+		JPanel panel = new JPanel(new BorderLayout());
+		
+		LblTituloVentana = new JLabel("Complete los campos", SwingConstants.CENTER);
+		panel.add(LblTituloVentana, BorderLayout.NORTH);
+
+		//Parte central con campos a completar y listado de empleados
+		JPanel panelCentral = new JPanel(new BorderLayout());
+		
+		JPanel panelCampos = new JPanel(new GridLayout(0, 2, 10, 10));
+		JLabel LblTitulo = new JLabel("Titulo");
+		panelCampos.add(LblTitulo);
+		TxtTitulo = new JTextField("", 20);
+		panelCampos.add(TxtTitulo);
+		panelCentral.add(panelCampos,BorderLayout.NORTH);
+		
+		JPanel panelEmpleados = new JPanel(new BorderLayout());
+		LblTituloEmpleados = new JLabel("Listado de empleados", SwingConstants.CENTER);
+		panelEmpleados.add(LblTituloEmpleados, BorderLayout.NORTH);
+		modelo = new EmpleadoTableModel();
+		tabla = new JTable(modelo);
+		scrollPaneParaTabla = new JScrollPane(tabla);
+		panelEmpleados.add(scrollPaneParaTabla,BorderLayout.SOUTH);
+		panelCentral.add(panelEmpleados,BorderLayout.SOUTH);
+		
+		panel.add(panelCentral, BorderLayout.CENTER);
+		//fin parte central
+
+		JPanel panelBotones = new JPanel(new FlowLayout());
+		BtnAsignacionEmpleados = new JButton("Asignacion Empleados");
+		BtnAsignacionEmpleados.addActionListener(this);
+		panelBotones.add(BtnAsignacionEmpleados);
+		BtnGuardar = new JButton("Guardar");
+		BtnGuardar.addActionListener(this);
+		panelBotones.add(BtnGuardar);
+		panel.add(panelBotones, BorderLayout.SOUTH);
+
+		return panel;
+	}
+	
 	private void LlenarForm() {
 		try {
 			proyecto = proyectoService.getById(idProyecto);
@@ -81,58 +135,51 @@ public class FrmProyecto  extends JFrame implements ActionListener {
 		}
 	}
 	
-	private JPanel GetPanelPrincipal() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
+	public void cargarTabla(Empleado emp,boolean asignar) throws EmpleadoNoDisponibleException {
+		if(asignar) {
+			if(ListaEmpleados.contains(emp)) throw new EmpleadoNoDisponibleException("Ya se asigno ese empleado.");
+			else ListaEmpleados.add(emp);
+		} 
+		else ListaEmpleados.remove(emp);
 		
-		LblTituloVentana = new JLabel("Complete los campos", SwingConstants.CENTER);
-		panel.add(LblTituloVentana, BorderLayout.NORTH);
-		
-		JPanel panelCampos = new JPanel(new GridLayout(0, 2, 10, 10));
-		
-		LblTitulo = new JLabel("Titulo");
-		panelCampos.add(LblTitulo);
-		
-		TxtTitulo = new JTextField("", 20);
-		panelCampos.add(TxtTitulo);
-		
-		panel.add(panelCampos, BorderLayout.CENTER);
-		
-		BtnGuardar = new JButton("Guardar");
-		BtnGuardar.addActionListener(this);
-		panel.add(BtnGuardar, BorderLayout.SOUTH);
-
-		return panel;
+		modelo.setFilas(ListaEmpleados);
+		modelo.fireTableDataChanged();
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(TxtTitulo.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacios. Vuelva a intentar nuevamente", "Proyecto",
-			        JOptionPane.ERROR_MESSAGE);
+		if(e.getSource() == BtnAsignacionEmpleados){
+			new AsignacionEmpleados(idProyecto,this);
 		} else {
-			try {
-				if(proyecto == null) proyecto = new Proyecto();
-				
-				proyecto.setTitulo(TxtTitulo.getText());
-				
-				if(idProyecto == -1) {
-					proyectoService.crear(proyecto);
-				} else {
-					proyectoService.modificar(proyecto);
+			if(TxtTitulo.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(this, "El titulo no puede estar vacio. Vuelva a intentar nuevamente", "Proyecto",
+				        JOptionPane.ERROR_MESSAGE);
+			} else {
+				try {
+					if(proyecto == null) proyecto = new Proyecto();
+					
+					proyecto.setTitulo(TxtTitulo.getText());
+					
+					if(idProyecto == -1) {
+						proyectoService.crear(proyecto);
+						//persisitrEmpleados();
+					} else {
+						proyectoService.modificar(proyecto);
+					}
+					frm.cargarTabla();
+					this.setVisible(false);
+					dispose();
+				} catch (ServicioException ex) {
+					JOptionPane.showMessageDialog(this, ex.getMessage(), "FrmProyecto",
+					        JOptionPane.ERROR_MESSAGE);
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(this, "Algo salio mal: " + ex.getMessage(), "FrmProyecto",
+					        JOptionPane.ERROR_MESSAGE);
 				}
-				frm.cargarTabla();
-				this.setVisible(false);
-				dispose();
-			} catch (ServicioException ex) {
-				JOptionPane.showMessageDialog(this, ex.getMessage(), "FrmProyecto",
-				        JOptionPane.ERROR_MESSAGE);
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(this, "Algo salio mal: " + ex.getMessage(), "FrmTarea",
-				        JOptionPane.ERROR_MESSAGE);
 			}
 		}
-		
 	}	
+
+	
 	
 }

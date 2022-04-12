@@ -38,13 +38,14 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 	private JScrollPane scrollPaneParaTabla;
 	private JLabel LblTitulo;
 	private BotoneraCrud botoneraCrud = new BotoneraCrud();
+	JButton botonVerProyecto;
 	JButton botonVerTareas;
 	JButton botonVerEmpleados;
 	
 	public FrmListadoProyectos() {
 		
 		// setea titulo ventana
-		this.setTitle("Proyectos");
+		this.setTitle("Administrador de Proyectos");
 
 		// se cierra la ventana al hacer click en el boton X
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -79,12 +80,15 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 		
 		
 		JPanel panelSouth = new JPanel(new FlowLayout());
-		botonVerTareas = new JButton("Ver Tareas");
+		botonVerProyecto = new JButton("Ver");
+		botonVerProyecto.addActionListener(this);
+		botonVerTareas = new JButton("Tareas");
 		botonVerTareas.addActionListener(this);
-		panelSouth.add(botonVerTareas);
-		botonVerEmpleados = new JButton("Ver Empleados");
+		botonVerEmpleados = new JButton("Pool Empleados");
 		botonVerEmpleados.addActionListener(this);
 		panelSouth.add(botonVerEmpleados);
+		panelSouth.add(botonVerTareas);
+		panelSouth.add(botonVerProyecto);
 		panelSouth.add(botoneraCrud.GetPanelBotones(this));
 		
 		panel.add(panelSouth, BorderLayout.SOUTH);
