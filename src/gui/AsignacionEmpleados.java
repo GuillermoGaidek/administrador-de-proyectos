@@ -112,7 +112,7 @@ public class AsignacionEmpleados extends JFrame implements ActionListener{
 						frm.cargarTabla(emp,!asignar);
 					}
 					
-				} else { // Si ya existe modifico en la BD
+				} else { // Si ya existe modifico en la BD directamente
 					Proyecto proy = proyectoService.getById(idProyecto);
 					
 					if(e.getSource() == BtnAsignar) {
@@ -122,8 +122,7 @@ public class AsignacionEmpleados extends JFrame implements ActionListener{
 					}
 					
 					empleadoService.modificar(emp);
-					
-					//frm.cargarTabla();
+					frm.cargarTabla();
 				}
 				
 				this.setVisible(false);

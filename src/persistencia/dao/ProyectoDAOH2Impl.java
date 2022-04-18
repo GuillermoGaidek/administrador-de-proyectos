@@ -162,6 +162,28 @@ public class ProyectoDAOH2Impl implements DAO<Proyecto> {
 	}
 		
 	@Override
-	public long getLastId() {return 0;}
+	public long getLastId() throws DAOException {
+		String sql = "SELECT MAX(ID) AS ID FROM PROYECTO";
+		long lastId = 0;
+		Connection c = DBManager.connect();
+		
+		try {
+			Statement s = c.createStatement();
+			ResultSet rs = s.executeQuery(sql);
+			
+			if (rs.next()) lastId = rs.getLong("ID");
+			
+		} catch(SQLException e) {
+				throw new DAOException("Error al consultar la BD", e);
+		} finally {
+			try {
+				DBManager.close();
+			} catch (SQLException e) {
+				throw new DAOException("Error al cerrar la conexion de la BD", e);
+			}
+		}
+		
+		return lastId;
+	}
 	
 }

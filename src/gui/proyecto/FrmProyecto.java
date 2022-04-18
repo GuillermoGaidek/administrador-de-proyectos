@@ -129,6 +129,7 @@ public class FrmProyecto  extends JFrame implements ActionListener {
 			proyecto = proyectoService.getById(idProyecto);
 			
 			TxtTitulo.setText(proyecto.getTitulo());
+			cargarTabla();
 		} catch (ServicioException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Proyecto",
 			        JOptionPane.ERROR_MESSAGE);
@@ -146,6 +147,18 @@ public class FrmProyecto  extends JFrame implements ActionListener {
 		modelo.fireTableDataChanged();
 	}
 	
+	public void cargarTabla() {
+		List<Empleado> lista;
+		try {
+			lista = empleadoService.listarById(idProyecto);
+			modelo.setFilas(lista);
+			modelo.fireTableDataChanged();	
+		} catch (ServicioException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage(),
+					"Cargar Proyecto",JOptionPane.ERROR_MESSAGE);
+		}
+	}	
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == BtnAsignacionEmpleados){
@@ -162,7 +175,13 @@ public class FrmProyecto  extends JFrame implements ActionListener {
 					
 					if(idProyecto == -1) {
 						proyectoService.crear(proyecto);
-						//persisitrEmpleados();
+						proyecto.setId(proyectoService.getLastId());
+						
+						for(Empleado emp : ListaEmpleados) {
+							emp.setProyecto(proyecto);
+							empleadoService.modificar(emp);
+						}
+						
 					} else {
 						proyectoService.modificar(proyecto);
 					}

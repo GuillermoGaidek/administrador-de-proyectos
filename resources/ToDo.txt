@@ -1,37 +1,33 @@
-0)Lugares botones: poolEMpleados WEST,Agregar Modificar Borrar Ver NORTH, Tareas South
-1)TERMINAR LOGICA DE FRMPROYECTO PARA QUE PERSISTA LOS DATOS DE LA LISTA 
-DE EMPLADOS ASIGNADOS EN MEMORIA DINAMICA
+1)EL BOTON VER PASARA A TENER LA PANTALLITA CON EL TITULO, LAS TAREAS Y LOS EMPLEADOS ABAJO
+1.b)Tareas tendria que estar dentro de ver proyectos.
 
-2)TERMINAR EL ASIGNAR/DESASIGNAR PARA QUE FUNCIONE AL MODIFICAR 
-UN PROYECTO TAMBIEN.PARA ESTO VOY A TENER QUE MODIFICAR EL CARGARTABLA DE FRMPROYECTO
+2)Agregar pantalla de Pool Empleados con todos los empleados. Aca se agregan borra o modifican empleados.
+El Dni no se tendria que poder modificar.
+Ver que pasa si borro uno con la tarea y eso.
 
 3)Ver por que empleados aparecen como ocupados al mostrarlos en las listas.
 
-4)EL BOTON VER PASARA A TENER LA PANTALLITA CON EL TITULO, LAS TAREAS Y LOS EMPLEADOS ABAJO
-
-5)Agregar pantalla de pool con todos los empleados. Aca se agregan borra o modifican empleados.
-
-6)Terminar dropdowns en todos lados de asignaciones. Ver bien lo que hay q listar.
+4)Terminar dropdowns en todos lados de asignaciones. Ver bien lo que hay q listar.
 En asignar/desasignar empleados tiene que mostrar los q esten libres en la BD.
 
-7)Ver todas las relaciones de empleado <-> proyecto posibles.
+5)Ver todas las relaciones de empleado <-> proyecto posibles.
 
-8)Ver logica al borrar proyecto, que pida confirmacion si tiene tareas en curso y empelados queden libres y tareas borradas.
-
-9)Al agregar tarea que se agregue directamente el proyecto seleccionado.
-Se podria agregar a otro q no sea en el que estoy parado
-
-10)No se puede cambiar empleado de proyecto si tiene tarea asignada, al igual que no se puede
+6)No se puede cambiar empleado de proyecto si tiene tarea asignada, al igual que no se puede
 cambiar tarea de proyecto si tiene empleado asignado de ese proyecto.
 
-11)Agregar Timestamp para la clase Estado y en BD.
+7)Ver logica al borrar proyecto, que pida confirmacion si tiene tareas en curso y empelados queden libres y tareas borradas.
 
-12)Mostrar el historial de estados de las tareas.. 
+8)Al agregar tarea que se agregue directamente el proyecto seleccionado.
+Se podria agregar a otro q no sea en el que estoy parado
 
-13)Manejo de errores poco descriptivo y mal nombre de parametros.
+9)Agregar Timestamp para la clase Estado y en BD.
+
+10)Mostrar el historial de estados de las tareas.. 
+
+11)Manejo de errores poco descriptivo y mal nombre de parametros.
 Manejar bien los errores tipo LABO2.
 
-14)Q&A de campos null y refactorizar para no repetir codigo.
+12)Q&A de campos null y refactorizar para no repetir codigo.
 
 
 
@@ -58,3 +54,9 @@ y despues asigne los empleados de la lista asi ya puedo tener el Id del proyecto
 2-Modificar Proyecto
 Para cuando el proyecto ya esta creado, el asignar/desasignar va a tener que trabajr 
 con la BD en vez de la lista en memoria.
+
+6)TERMINAR LOGICA DE FRMPROYECTO PARA QUE PERSISTA LOS DATOS DE LA LISTA 
+DE EMPLADOS ASIGNADOS EN MEMORIA DINAMICA
+
+7)TERMINAR EL MODIFICAR PROYECTO Y ASIGNAR/DESASIGNAR PARA QUE FUNCIONE AL MODIFICAR 
+UN PROYECTO TAMBIEN.

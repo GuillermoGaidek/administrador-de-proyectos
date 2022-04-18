@@ -40,7 +40,7 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 	private BotoneraCrud botoneraCrud = new BotoneraCrud();
 	JButton botonVerProyecto;
 	JButton botonVerTareas;
-	JButton botonVerEmpleados;
+	JButton botonPoolEmpleados;
 	
 	public FrmListadoProyectos() {
 		
@@ -80,17 +80,25 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 		
 		
 		JPanel panelSouth = new JPanel(new FlowLayout());
-		botonVerProyecto = new JButton("Ver");
+		JPanel panelWest = new JPanel(new BorderLayout());
+		JPanel panelEast = new JPanel(new BorderLayout());
+		
+		botonVerProyecto = new JButton("Ver Proyecto");
 		botonVerProyecto.addActionListener(this);
 		botonVerTareas = new JButton("Tareas");
 		botonVerTareas.addActionListener(this);
-		botonVerEmpleados = new JButton("Pool Empleados");
-		botonVerEmpleados.addActionListener(this);
-		panelSouth.add(botonVerEmpleados);
-		panelSouth.add(botonVerTareas);
-		panelSouth.add(botonVerProyecto);
-		panelSouth.add(botoneraCrud.GetPanelBotones(this));
+		botonPoolEmpleados = new JButton("Pool Empleados");
+		botonPoolEmpleados.addActionListener(this);
 		
+		panelWest.add(botonPoolEmpleados);
+		panelEast.add(botoneraCrud.GetPanelBotones(this),BorderLayout.CENTER);
+		panelEast.add(botonVerProyecto,BorderLayout.NORTH);
+		panelEast.add(botonVerTareas,BorderLayout.SOUTH);
+		
+		panelSouth.add(panelWest);
+		panelSouth.add(panelEast);
+		
+				
 		panel.add(panelSouth, BorderLayout.SOUTH);
 		
 		return panel;
@@ -147,7 +155,7 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 				JOptionPane.showMessageDialog(this, "No selecciono ningun proyecto", "Ver Tareas",
 				        JOptionPane.ERROR_MESSAGE);
 			}
-		} else if(e.getSource() == botonVerEmpleados) {
+		} else if(e.getSource() == botonPoolEmpleados) {
 			if(this.tabla.getSelectedRow() != -1) {
 				fila = this.tabla.getSelectedRow();
 				long id = (long)this.tabla.getValueAt(fila, 0);
