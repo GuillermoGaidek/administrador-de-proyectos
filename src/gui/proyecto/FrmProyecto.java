@@ -38,7 +38,6 @@ public class FrmProyecto  extends JFrame implements ActionListener {
 
 	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
 	GenericService<Proyecto> proyectoService = new GenericService<Proyecto>(new ProyectoDAOH2Impl());
-	GenericService<Estado> estadoService = new GenericService<Estado>(new EstadoDAOH2Impl());
 		
 	private JLabel LblTituloVentana;
 	private JLabel LblTitulo;	

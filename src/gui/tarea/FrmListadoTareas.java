@@ -1,12 +1,15 @@
 package gui.tarea;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
 
 import com.sun.javafx.tk.Toolkit;
 
@@ -28,7 +32,7 @@ import persistencia.dao.EmpleadoDAOH2Impl;
 import persistencia.dao.EstadoDAOH2Impl;
 import persistencia.dao.TareaDAOH2Impl;
 
-public class FrmListadoTareas extends JFrame implements ActionListener {
+public class FrmListadoTareas implements ActionListener {
 	
 	GenericService<Tarea> tareaService = new GenericService<Tarea>(new TareaDAOH2Impl());
 	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
@@ -42,32 +46,10 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 	public FrmListadoTareas(long idProyecto) {
 		// asigna el proyecto seleccionado
 		this.idProyecto = idProyecto;
-		
-		// setea titulo ventana
-		this.setTitle("Tareas");
-
-		// se cierra la ventana al hacer click en el boton X
-		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-
-		// setear panel de la ventana
-		this.setContentPane(GetPanelPrincipal());
-
-		// compacta las componentes de la ventana
-		this.pack();
-		
-		// alilnea la ventana en el medio de la pantalla
-		this.setLocationRelativeTo(null);
-
-		// muestra la ventana
-		this.setVisible(true);
-		
 	}
 	
-	private JPanel GetPanelPrincipal() {
+	public JPanel GetPanelPrincipal() {
 		JPanel panel = new JPanel(new BorderLayout());
-		
-		LblTitulo = new JLabel("Listado de tareas", SwingConstants.CENTER);
-		panel.add(LblTitulo, BorderLayout.NORTH);
 		
 		modelo = new TareaTableModel();
 		tabla = new JTable(modelo);
@@ -76,6 +58,9 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 		panel.add(scrollPaneParaTabla, BorderLayout.CENTER);
 		
 		panel.add(botoneraCrud.GetPanelBotones(this), BorderLayout.SOUTH);
+		panel.setPreferredSize(new Dimension(340, 240));
+		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(2, 2,
+		        2, 2, Color.black), "TAREAS", TitledBorder.LEFT, TitledBorder.TOP));
 		
 		return panel;
 	}
@@ -86,10 +71,12 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 			lista = tareaService.listarById(idProyecto);
 			modelo.setFilas(lista);
 			modelo.fireTableDataChanged();	
-		} catch (ServicioException ex) {
-			JOptionPane.showMessageDialog(this, ex.getMessage(),
-					"Cargar Tabla",JOptionPane.ERROR_MESSAGE);
+		} catch (ServicioException e) {
+			JOptionPane.showMessageDialog(new JFrame() , e.getMessage(),
+					"Cargar Tarea",JOptionPane.ERROR_MESSAGE);
+			
 		}
+		
 	}	
 
 	public void actionPerformed(ActionEvent e){
@@ -101,7 +88,7 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 				long idTarea = (long)this.tabla.getValueAt(fila, 0);
 				new FrmTarea(idTarea, this);	
 			} else {
-				JOptionPane.showMessageDialog(this, "No selecciono ninguna tarea",
+				JOptionPane.showMessageDialog(new JFrame(), "No selecciono ninguna tarea",
 												"Modificar",JOptionPane.ERROR_MESSAGE);
 			}	
 		} else if (e.getSource() == botoneraCrud.botonBorrar) {
@@ -114,11 +101,11 @@ public class FrmListadoTareas extends JFrame implements ActionListener {
 					tareaService.borrar(t);
 					cargarTabla();		
 				} else {
-					JOptionPane.showMessageDialog(this, "No selecciono ninguna tarea", "Borrar",
+					JOptionPane.showMessageDialog(new JFrame(), "No selecciono ninguna tarea", "Borrar",
 					        JOptionPane.ERROR_MESSAGE);
 				}
 			}catch(ServicioException ex) {
-				JOptionPane.showMessageDialog(this, ex.getMessage(),
+				JOptionPane.showMessageDialog(new JFrame(), ex.getMessage(),
 						"Borrar",JOptionPane.ERROR_MESSAGE);
 			}
 		}

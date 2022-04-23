@@ -39,7 +39,6 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 	private JLabel LblTitulo;
 	private BotoneraCrud botoneraCrud = new BotoneraCrud();
 	JButton botonVerProyecto;
-	JButton botonVerTareas;
 	JButton botonPoolEmpleados;
 	
 	public FrmListadoProyectos() {
@@ -85,15 +84,12 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 		
 		botonVerProyecto = new JButton("Ver Proyecto");
 		botonVerProyecto.addActionListener(this);
-		botonVerTareas = new JButton("Tareas");
-		botonVerTareas.addActionListener(this);
 		botonPoolEmpleados = new JButton("Pool Empleados");
 		botonPoolEmpleados.addActionListener(this);
 		
 		panelWest.add(botonPoolEmpleados);
 		panelEast.add(botoneraCrud.GetPanelBotones(this),BorderLayout.CENTER);
 		panelEast.add(botonVerProyecto,BorderLayout.NORTH);
-		panelEast.add(botonVerTareas,BorderLayout.SOUTH);
 		
 		panelSouth.add(panelWest);
 		panelSouth.add(panelEast);
@@ -146,11 +142,11 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 				JOptionPane.showMessageDialog(this, ex.getMessage(),
 						"Borrar",JOptionPane.ERROR_MESSAGE);
 			}
-		} else if(e.getSource() == botonVerTareas) {
+		} else if(e.getSource() == botonVerProyecto) {
 			if(this.tabla.getSelectedRow() != -1) {
 				fila = this.tabla.getSelectedRow();
 				long id = (long)this.tabla.getValueAt(fila, 0);
-				new FrmListadoTareas(id);
+				new VerProyecto(id);
 			} else {
 				JOptionPane.showMessageDialog(this, "No selecciono ningun proyecto", "Ver Tareas",
 				        JOptionPane.ERROR_MESSAGE);

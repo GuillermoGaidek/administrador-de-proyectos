@@ -1,6 +1,3 @@
-1)EL BOTON VER PASARA A TENER LA PANTALLITA CON EL TITULO, LAS TAREAS Y LOS EMPLEADOS ABAJO
-1.b)Tareas tendria que estar dentro de ver proyectos.
-
 2)Agregar pantalla de Pool Empleados con todos los empleados. Aca se agregan borra o modifican empleados.
 El Dni no se tendria que poder modificar.
 Ver que pasa si borro uno con la tarea y eso.
@@ -26,8 +23,7 @@ Se podria agregar a otro q no sea en el que estoy parado
 
 11)Manejo de errores poco descriptivo y mal nombre de parametros.
 Manejar bien los errores tipo LABO2.
-
-12)Q&A de campos null y refactorizar para no repetir codigo.
+11.b)Q&A de campos null y refactorizar para no repetir codigo.
 
 
 
@@ -60,3 +56,6 @@ DE EMPLADOS ASIGNADOS EN MEMORIA DINAMICA
 
 7)TERMINAR EL MODIFICAR PROYECTO Y ASIGNAR/DESASIGNAR PARA QUE FUNCIONE AL MODIFICAR 
 UN PROYECTO TAMBIEN.
+
+8)EL BOTON VER PASARA A TENER LA PANTALLITA CON EL TITULO, LAS TAREAS CON OPCIONES Y LOS EMPLEADOS
+Tareas tendria que estar dentro de ver proyecto.

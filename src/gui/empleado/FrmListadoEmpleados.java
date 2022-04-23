@@ -1,10 +1,13 @@
 package gui.empleado;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -12,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
 
 import gui.BotoneraCrud;
 import gui.tarea.FrmTarea;
@@ -32,6 +36,12 @@ public class FrmListadoEmpleados extends JFrame implements ActionListener{
 	private JLabel LblTitulo;
 	private BotoneraCrud botoneraCrud = new BotoneraCrud();
 	private long idProyecto;
+	boolean mostrarBotonera = true;
+	
+	public FrmListadoEmpleados(long idProyecto,boolean mostrarBotonera) {
+		this.idProyecto = idProyecto;
+		this.mostrarBotonera = mostrarBotonera;
+	}
 	
 	public FrmListadoEmpleados(long idProyecto) {
 		// asigna el proyecto seleccionado
@@ -57,10 +67,12 @@ public class FrmListadoEmpleados extends JFrame implements ActionListener{
 		
 	}
 	
-	private JPanel GetPanelPrincipal() {
+	public JPanel GetPanelPrincipal() {
 		JPanel panel = new JPanel(new BorderLayout());
 		
-		LblTitulo = new JLabel("Listado de Empleados", SwingConstants.CENTER);
+		String t = mostrarBotonera ? "Listado de Empleados" : null;
+		
+		LblTitulo = new JLabel(t, SwingConstants.CENTER);
 		panel.add(LblTitulo, BorderLayout.NORTH);
 		
 		modelo = new EmpleadoTableModel();
@@ -69,7 +81,13 @@ public class FrmListadoEmpleados extends JFrame implements ActionListener{
 		scrollPaneParaTabla = new JScrollPane(tabla);
 		panel.add(scrollPaneParaTabla, BorderLayout.CENTER);
 		
-		panel.add(botoneraCrud.GetPanelBotones(this), BorderLayout.SOUTH);
+		if(mostrarBotonera) {
+			panel.add(botoneraCrud.GetPanelBotones(this), BorderLayout.SOUTH);
+		}else{
+			panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(2, 2,
+			        2, 2, Color.black), "EMPLEADOS", TitledBorder.LEFT, TitledBorder.TOP));
+		}
+		panel.setPreferredSize(new Dimension(540, 240));
 		
 		return panel;
 	}
