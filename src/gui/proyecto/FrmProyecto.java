@@ -22,7 +22,7 @@ import javax.swing.SwingConstants;
 import gui.AsignacionEmpleados;
 import gui.empleado.EmpleadoTableModel;
 import gui.tarea.FrmListadoTareas;
-import logica.excepciones.EmpleadoNoDisponibleException;
+import logica.excepciones.EmpleadoYaAsignadoException;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
 import logica.model.Estado;
@@ -42,9 +42,7 @@ public class FrmProyecto  extends JFrame implements ActionListener {
 	private JLabel LblTituloVentana;
 	private JLabel LblTitulo;	
 	private JLabel LblTituloEmpleados;
-	private JLabel LblEmpleado;
 	private JTextField TxtTitulo;
-	private JTextField TxtEmpleado;
 	private JTable tabla;
 	private EmpleadoTableModel modelo;
 	private JScrollPane scrollPaneParaTabla;
@@ -93,7 +91,7 @@ public class FrmProyecto  extends JFrame implements ActionListener {
 		JPanel panelCentral = new JPanel(new BorderLayout());
 		
 		JPanel panelCampos = new JPanel(new GridLayout(0, 2, 10, 10));
-		JLabel LblTitulo = new JLabel("Titulo");
+		LblTitulo = new JLabel("Titulo");
 		panelCampos.add(LblTitulo);
 		TxtTitulo = new JTextField("", 20);
 		panelCampos.add(TxtTitulo);
@@ -135,9 +133,9 @@ public class FrmProyecto  extends JFrame implements ActionListener {
 		}
 	}
 	
-	public void cargarTabla(Empleado emp,boolean asignar) throws EmpleadoNoDisponibleException {
+	public void cargarTabla(Empleado emp,boolean asignar) throws EmpleadoYaAsignadoException {
 		if(asignar) {
-			if(ListaEmpleados.contains(emp)) throw new EmpleadoNoDisponibleException("Ya se asigno ese empleado.");
+			if(ListaEmpleados.contains(emp)) throw new EmpleadoYaAsignadoException("Ya se asigno ese empleado.");
 			else ListaEmpleados.add(emp);
 		} 
 		else ListaEmpleados.remove(emp);
@@ -182,6 +180,9 @@ public class FrmProyecto  extends JFrame implements ActionListener {
 						}
 						
 					} else {
+						//Si el proyecto ya esta creado y se esta
+						//modificando no necesito recorrer la lista asignando  
+						//ya que modifica directo por BD.
 						proyectoService.modificar(proyecto);
 					}
 					frm.cargarTabla();

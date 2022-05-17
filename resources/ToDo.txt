@@ -1,29 +1,20 @@
-2)Agregar pantalla de Pool Empleados con todos los empleados. Aca se agregan borra o modifican empleados.
-El Dni no se tendria que poder modificar.
-Ver que pasa si borro uno con la tarea y eso.
+4)Mostrar el historial de estados de las tareas.. 
 
-3)Ver por que empleados aparecen como ocupados al mostrarlos en las listas.
+5)Error de empleado ya agregado que onda?
 
-4)Terminar dropdowns en todos lados de asignaciones. Ver bien lo que hay q listar.
-En asignar/desasignar empleados tiene que mostrar los q esten libres en la BD.
-
-5)Ver todas las relaciones de empleado <-> proyecto posibles.
-
-6)No se puede cambiar empleado de proyecto si tiene tarea asignada, al igual que no se puede
+6)Ver todas las relaciones de empleado <-> proyecto posibles.
+Ver que pasa si borro uno con proyecto asignado o tarea..
+No se puede cambiar empleado de proyecto si tiene tarea asignada, al igual que no se puede
 cambiar tarea de proyecto si tiene empleado asignado de ese proyecto.
 
-7)Ver logica al borrar proyecto, que pida confirmacion si tiene tareas en curso y empelados queden libres y tareas borradas.
+7)Ver logica al borrar proyecto, que pida confirmacion si tiene tareas en curso y 
+empelados queden libres y tareas borradas y estados.
+Que onda con los IDs al borrar un proyecto o tarea,etc?
 
-8)Al agregar tarea que se agregue directamente el proyecto seleccionado.
-Se podria agregar a otro q no sea en el que estoy parado
-
-9)Agregar Timestamp para la clase Estado y en BD.
-
-10)Mostrar el historial de estados de las tareas.. 
-
-11)Manejo de errores poco descriptivo y mal nombre de parametros.
+8)Manejo de errores poco descriptivo y mal nombre de parametros.
 Manejar bien los errores tipo LABO2.
-11.b)Q&A de campos null y refactorizar para no repetir codigo.
+
+9)Q&A de campos null y refactorizar para no repetir codigo.
 
 
 
@@ -58,4 +49,26 @@ DE EMPLADOS ASIGNADOS EN MEMORIA DINAMICA
 UN PROYECTO TAMBIEN.
 
 8)EL BOTON VER PASARA A TENER LA PANTALLITA CON EL TITULO, LAS TAREAS CON OPCIONES Y LOS EMPLEADOS
+Reutilizo las clases de FrmListadoTareas y eso en verProyecto !!!
 Tareas tendria que estar dentro de ver proyecto.
+
+9)Agregar pantalla de Pool Empleados con todos los empleados. 
+Aca se agregan borra o modifican empleados.
+
+10)Hice una clase que agrupa todo lo relacionado con los COmboBox.
+En asignar/desasignar empleados tiene que mostrar los q esten libres en la BD.
+
+11)Combbox de empleado en Frmtarea.
+Si modifica pone el q ya tiene por default en el combo..
+
+12)Cambiar estado en FrmTarea a dropdawn.Se agrego a clase Combo.
+
+13)Problema con los estados de las tareas al elimniar una y volver a crear otra.
+Creo una tarea y la BD le da ID 1, despues la borro y creo otra y la BD le va a dar ID 2 
+pero mi sistema de guardar los estados va a a hacer getlastID (que sera 0) y le suma 1 entnces 
+me guardara el estado en la tarea 1 pero en realidad es de la tarea 2 entnces 
+depsues la tarea no va a tener estado asignado por el desfasaje de los IDs.
+Entonces el error va a estar cuadno este mostrando las tareas que vo a tener 
+el estado en null y por eso el NPExecp.
+
+14)Agregar Timestamp para la clase Estado y en BD.

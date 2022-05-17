@@ -64,18 +64,18 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 	}
 	
 	private JPanel GetPanelPrincipal() {
-		JPanel panel = new JPanel(new BorderLayout());
+		JPanel panelPrincipal = new JPanel(new BorderLayout());
 		
 		LblTitulo = new JLabel("Listado de proyectos", SwingConstants.CENTER);
 		
-		panel.add(LblTitulo, BorderLayout.NORTH);
+		panelPrincipal.add(LblTitulo, BorderLayout.NORTH);
 		
 		modelo = new ProyectoTableModel();
 		tabla = new JTable(modelo);
 		cargarTabla();
 		scrollPaneParaTabla = new JScrollPane(tabla);
 		
-		panel.add(scrollPaneParaTabla, BorderLayout.CENTER);
+		panelPrincipal.add(scrollPaneParaTabla, BorderLayout.CENTER);
 		
 		
 		JPanel panelSouth = new JPanel(new FlowLayout());
@@ -95,9 +95,9 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 		panelSouth.add(panelEast);
 		
 				
-		panel.add(panelSouth, BorderLayout.SOUTH);
+		panelPrincipal.add(panelSouth, BorderLayout.SOUTH);
 		
-		return panel;
+		return panelPrincipal;
 	}
 	
 	public void cargarTabla() {
@@ -152,16 +152,9 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 				        JOptionPane.ERROR_MESSAGE);
 			}
 		} else if(e.getSource() == botonPoolEmpleados) {
-			if(this.tabla.getSelectedRow() != -1) {
-				fila = this.tabla.getSelectedRow();
-				long id = (long)this.tabla.getValueAt(fila, 0);
-				new FrmListadoEmpleados(id);
-			} else {
-				JOptionPane.showMessageDialog(this, "No selecciono ningun proyecto", "Ver Empleados",
-				        JOptionPane.ERROR_MESSAGE);
+			new FrmListadoEmpleados();
 			}
 		}
-	}
 	
 	
 }

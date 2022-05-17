@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -34,7 +36,7 @@ public class AsignacionEmpleados extends JFrame implements ActionListener{
 	
 	private JLabel LblTituloVentana;	
 	private JLabel LblEmpleado;
-	private JTextField TxtEmpleado;
+	private JComboBox ComboEmpleado;
 	private JButton BtnAsignar;
 	private JButton BtnDesasignar;
 	private FrmProyecto frm;
@@ -53,7 +55,12 @@ public class AsignacionEmpleados extends JFrame implements ActionListener{
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
 		// setear panel de la ventana
-		this.setContentPane(GetPanelPrincipal());
+		try {
+			this.setContentPane(GetPanelPrincipal());
+		} catch (ServicioException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage(), "Asignacion de empleados",
+			        JOptionPane.ERROR_MESSAGE);
+		}
 
 		// compacta las componentes de la ventana
 		this.pack();
@@ -66,7 +73,7 @@ public class AsignacionEmpleados extends JFrame implements ActionListener{
 
 	}
 	
-	private JPanel GetPanelPrincipal() {
+	private JPanel GetPanelPrincipal() throws ServicioException {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		
@@ -77,33 +84,33 @@ public class AsignacionEmpleados extends JFrame implements ActionListener{
 		
 		LblEmpleado = new JLabel("Empleado");
 		panelCampos.add(LblEmpleado);
-		
-		TxtEmpleado = new JTextField("", 20);
-		panelCampos.add(TxtEmpleado);
+	
+		ComboEmpleado = Combo.getComboEmpleadosLibres(empleadoService.listar(), idProyecto);
+		panelCampos.add(ComboEmpleado);
 		
 		panel.add(panelCampos, BorderLayout.CENTER);
 		
 		JPanel panelBotones = new JPanel(new FlowLayout());
 		BtnAsignar = new JButton("Agregar");
 		BtnAsignar.addActionListener(this);
-		BtnDesasignar = new JButton("Eliminar");
+		BtnDesasignar = new JButton("Desasignar");
 		BtnDesasignar.addActionListener(this);
 		panelBotones.add(BtnAsignar);
 		panelBotones.add(BtnDesasignar);
 		
 		panel.add(panelBotones, BorderLayout.SOUTH);
-
+		panel.setPreferredSize(new Dimension(440,70));
 		return panel;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(TxtEmpleado.getText().isEmpty()) {
+		if(ComboEmpleado.getSelectedItem() == null) {
 			JOptionPane.showMessageDialog(this, "El campo no puede estar vacio. Vuelva a intentar nuevamente", "Asignacion de empleados",
 			        JOptionPane.ERROR_MESSAGE);
 		} else {
 			try {
-				Empleado emp = empleadoService.getById(Long.parseLong(TxtEmpleado.getText()));
+				Empleado emp = empleadoService.getById((Long)ComboEmpleado.getSelectedItem());
 				
 				if(idProyecto == -1) { //Si el proyecto no existe cargo en la lista en memoria
 					if(e.getSource() == BtnAsignar) {
@@ -137,4 +144,5 @@ public class AsignacionEmpleados extends JFrame implements ActionListener{
 		}
 		
 	}
+	
 }

@@ -41,7 +41,7 @@ public class FrmEmpleado extends JFrame implements ActionListener {
 	private JTextField TxtDni;
 	private JTextField TxtCostoPorHora;
 	private JLabel TxtLibre;
-	private JTextField TxtIdProyecto;
+	private JLabel TxtIdProyecto;
 	
 	private JButton BtnGuardar;
 	private FrmListadoEmpleados frm;
@@ -83,7 +83,7 @@ public class FrmEmpleado extends JFrame implements ActionListener {
 			TxtDni.setText(String.valueOf(empleado.getDni()));
 			TxtCostoPorHora.setText(String.valueOf(empleado.getCostoPorHora()));
 			TxtLibre.setText(empleado.estaLibre()? "SI": "NO");
-			TxtIdProyecto.setText(String.valueOf(empleado.getProyecto().getId()));
+			TxtIdProyecto.setText(empleado.getProyecto().getTitulo());
 			
 		} catch (ServicioException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Empleado",
@@ -116,17 +116,13 @@ public class FrmEmpleado extends JFrame implements ActionListener {
 		LblLibre = new JLabel("Libre");
 		panelCampos.add(LblLibre);
 		
-		if(empleado == null) {
-			TxtLibre = new JLabel("SI");
-		}else {
-			TxtLibre = new JLabel(empleado.estaLibre()? "SI": "NO");
-		}
+		TxtLibre = new JLabel("SI");
 		panelCampos.add(TxtLibre);
 		
 		LblIdProyecto = new JLabel("Proyecto");
 		panelCampos.add(LblIdProyecto);
 		
-		TxtIdProyecto = new JTextField("", 20);
+		TxtIdProyecto = new JLabel("-");
 		panelCampos.add(TxtIdProyecto);
 
 		panel.add(panelCampos, BorderLayout.CENTER);
@@ -140,7 +136,7 @@ public class FrmEmpleado extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(TxtDni.getText().isEmpty() || TxtCostoPorHora.getText().isEmpty() || TxtLibre.getText().isEmpty() || TxtIdProyecto.getText().isEmpty()) {
+		if(TxtDni.getText().isEmpty() || TxtCostoPorHora.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacios. Vuelva a intentar nuevamente", "Empleado",
 			        JOptionPane.ERROR_MESSAGE);
 		} else {
@@ -150,8 +146,8 @@ public class FrmEmpleado extends JFrame implements ActionListener {
 				//Asigno campos nuevos al empleado
 				empleado.setDni(Long.parseLong(TxtDni.getText()));
 				empleado.setCostoPorHora(Integer.parseInt(TxtCostoPorHora.getText()));
-				empleado.setLibre(TxtLibre.getText() == "SI"? false : true);
-				empleado.setProyecto(proyectoService.getById(Long.parseLong(TxtIdProyecto.getText())));
+				empleado.setLibre(TxtLibre.getText() == "SI"? true : false);
+				empleado.setProyecto(TxtIdProyecto.getText() == "-"? null : empleado.getProyecto());
 				//Fin asigancion
 				
 				if(dniEmpleado == -1) {

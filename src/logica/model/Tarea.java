@@ -1,6 +1,5 @@
 package logica.model;
 
-import logica.excepciones.EmpleadoNoDisponibleException;
 import logica.excepciones.ServicioException;
 import logica.service.GenericService;
 import persistencia.dao.EmpleadoDAOH2Impl;
@@ -14,7 +13,7 @@ public class Tarea {
 	private int horasEstimadas;
 	private int horasReales;
 	private Empleado empleado;
-	private Estado estado;
+	private Estado estado;//deberia ser lista de estados
 	private Proyecto proyecto;
 	
 	public Tarea() {}

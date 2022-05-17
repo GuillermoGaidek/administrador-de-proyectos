@@ -10,7 +10,6 @@ import java.util.List;
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 
 import logica.excepciones.DAOException;
-import logica.excepciones.EmpleadoNoDisponibleException;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
 import logica.model.Estado;
@@ -125,8 +124,7 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 
 			while (rs.next()) {
 				Proyecto proyecto = rs.getLong("ID_PROYECTO") == 0 ? null : proyectoService.getById(rs.getLong("ID_PROYECTO"));
-				boolean persistir=true;
-				Empleado empleado = new Empleado(rs.getLong("DNI"), rs.getInt("COSTO_POR_HORA"),proyecto,!persistir);
+				Empleado empleado = new Empleado(rs.getLong("DNI"), rs.getInt("COSTO_POR_HORA"),proyecto);
 				lista.add(empleado);
 			}
 		} catch (SQLException e) {
@@ -138,8 +136,6 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 			}
 		} catch (ServicioException se) {
 			throw new DAOException("Error en el servicio al obtener lista de Tareas de la BD", se);
-		} catch (EmpleadoNoDisponibleException ee) {
-			throw new DAOException(ee.getMessage(), ee);
 		} finally {
 			try {
 				DBManager.close();
@@ -161,8 +157,7 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 
 			while (rs.next()) {
 				Proyecto proyecto = rs.getLong("ID_PROYECTO") == 0 ? null : proyectoService.getById(rs.getLong("ID_PROYECTO"));
-				boolean persistir=true;
-				Empleado empleado = new Empleado(rs.getLong("DNI"), rs.getInt("COSTO_POR_HORA"),proyecto,!persistir);
+				Empleado empleado = new Empleado(rs.getLong("DNI"), rs.getInt("COSTO_POR_HORA"),proyecto);
 				lista.add(empleado);
 			}
 		} catch (SQLException e) {
@@ -174,8 +169,6 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 			}
 		} catch (ServicioException se) {
 			throw new DAOException("Error en el servicio al obtener lista de Tareas de la BD", se);
-		} catch (EmpleadoNoDisponibleException ee) {
-			throw new DAOException(ee.getMessage(), ee);
 		} finally {
 			try {
 				DBManager.close();
@@ -197,8 +190,7 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 
 			if (rs.next()) {
 				Proyecto proyecto = proyectoService.getById(rs.getLong("ID_PROYECTO"));
-				boolean persistir=true;
-				empleado = new Empleado(rs.getLong("DNI"), rs.getInt("COSTO_POR_HORA"),proyecto,!persistir);
+				empleado = new Empleado(rs.getLong("DNI"), rs.getInt("COSTO_POR_HORA"),proyecto);
 			}
 
 		} catch (SQLException e) {
@@ -210,9 +202,7 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 			}
 		} catch (ServicioException se) {
 			throw new DAOException("Error en el servicio al obtener lista de Tareas de la BD", se);
-		} catch (EmpleadoNoDisponibleException ee) {
-			throw new DAOException(ee.getMessage(), ee);
-		}finally {
+		} finally {
 			try {
 				DBManager.close();
 			} catch (SQLException e) {

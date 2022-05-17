@@ -36,17 +36,14 @@ public class FrmListadoEmpleados extends JFrame implements ActionListener{
 	private JLabel LblTitulo;
 	private BotoneraCrud botoneraCrud = new BotoneraCrud();
 	private long idProyecto;
-	boolean mostrarBotonera = true;
+	boolean allEmpleados = true;
 	
-	public FrmListadoEmpleados(long idProyecto,boolean mostrarBotonera) {
+	public FrmListadoEmpleados(long idProyecto,boolean allEmpleados) {
 		this.idProyecto = idProyecto;
-		this.mostrarBotonera = mostrarBotonera;
+		this.allEmpleados = allEmpleados;
 	}
 	
-	public FrmListadoEmpleados(long idProyecto) {
-		// asigna el proyecto seleccionado
-		this.idProyecto = idProyecto;
-		
+	public FrmListadoEmpleados() {
 		// setea titulo ventana
 		this.setTitle("Empleados");
 
@@ -70,7 +67,7 @@ public class FrmListadoEmpleados extends JFrame implements ActionListener{
 	public JPanel GetPanelPrincipal() {
 		JPanel panel = new JPanel(new BorderLayout());
 		
-		String t = mostrarBotonera ? "Listado de Empleados" : null;
+		String t = allEmpleados ? "Listado de Empleados" : null;
 		
 		LblTitulo = new JLabel(t, SwingConstants.CENTER);
 		panel.add(LblTitulo, BorderLayout.NORTH);
@@ -81,7 +78,7 @@ public class FrmListadoEmpleados extends JFrame implements ActionListener{
 		scrollPaneParaTabla = new JScrollPane(tabla);
 		panel.add(scrollPaneParaTabla, BorderLayout.CENTER);
 		
-		if(mostrarBotonera) {
+		if(allEmpleados) {
 			panel.add(botoneraCrud.GetPanelBotones(this), BorderLayout.SOUTH);
 		}else{
 			panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(2, 2,
@@ -95,7 +92,11 @@ public class FrmListadoEmpleados extends JFrame implements ActionListener{
 	public void cargarTabla() {
 		List<Empleado> lista;
 		try {
-			lista = empleadoService.listarById(idProyecto);
+			if(allEmpleados) {
+				lista = empleadoService.listar();
+			}else {
+				lista = empleadoService.listarById(idProyecto);
+			}
 			modelo.setFilas(lista);
 			modelo.fireTableDataChanged();	
 		} catch (ServicioException ex) {

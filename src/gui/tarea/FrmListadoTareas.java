@@ -23,6 +23,7 @@ import javax.swing.border.TitledBorder;
 import com.sun.javafx.tk.Toolkit;
 
 import gui.BotoneraCrud;
+import gui.Estado.ListadoEstados;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
 import logica.model.Estado;
@@ -40,29 +41,36 @@ public class FrmListadoTareas implements ActionListener {
 	private TareaTableModel modelo;
 	private JScrollPane scrollPaneParaTabla;
 	private JLabel LblTitulo;
+	private JButton BtnEstado;
 	private BotoneraCrud botoneraCrud = new BotoneraCrud();
 	private long idProyecto;
-	
+
 	public FrmListadoTareas(long idProyecto) {
 		// asigna el proyecto seleccionado
 		this.idProyecto = idProyecto;
 	}
 	
 	public JPanel GetPanelPrincipal() {
-		JPanel panel = new JPanel(new BorderLayout());
+		JPanel panelPrincipal = new JPanel(new BorderLayout());
+		JPanel panelSouth = new JPanel(new FlowLayout());
 		
 		modelo = new TareaTableModel();
 		tabla = new JTable(modelo);
 		cargarTabla();
 		scrollPaneParaTabla = new JScrollPane(tabla);
-		panel.add(scrollPaneParaTabla, BorderLayout.CENTER);
+		panelPrincipal.add(scrollPaneParaTabla, BorderLayout.CENTER);
 		
-		panel.add(botoneraCrud.GetPanelBotones(this), BorderLayout.SOUTH);
-		panel.setPreferredSize(new Dimension(340, 240));
-		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(2, 2,
+		panelSouth.add(botoneraCrud.GetPanelBotones(this));
+		BtnEstado = new JButton("Historial Estados");
+		BtnEstado.addActionListener(this);
+		panelSouth.add(BtnEstado);
+		
+		panelPrincipal.add(panelSouth,BorderLayout.SOUTH);
+		panelPrincipal.setPreferredSize(new Dimension(340, 240));
+		panelPrincipal.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(2, 2,
 		        2, 2, Color.black), "TAREAS", TitledBorder.LEFT, TitledBorder.TOP));
 		
-		return panel;
+		return panelPrincipal;
 	}
 	
 	public void cargarTabla() {
@@ -76,9 +84,12 @@ public class FrmListadoTareas implements ActionListener {
 					"Cargar Tarea",JOptionPane.ERROR_MESSAGE);
 			
 		}
-		
 	}	
-
+	
+	public long getIdProyecto() {
+		return idProyecto;
+	}
+	
 	public void actionPerformed(ActionEvent e){
 		if (e.getSource() == botoneraCrud.botonAgregar) {
 			new FrmTarea(-1, this);
@@ -107,6 +118,15 @@ public class FrmListadoTareas implements ActionListener {
 			}catch(ServicioException ex) {
 				JOptionPane.showMessageDialog(new JFrame(), ex.getMessage(),
 						"Borrar",JOptionPane.ERROR_MESSAGE);
+			}
+		} else if (e.getSource() == BtnEstado) {
+			if(this.tabla.getSelectedRow() != -1) {
+				int fila = this.tabla.getSelectedRow();
+				long idTarea = (long)this.tabla.getValueAt(fila, 0);
+				new ListadoEstados(idTarea);
+			} else {
+				JOptionPane.showMessageDialog(new JFrame(), "No selecciono ninguna tarea",
+						"Historial Estados",JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

@@ -4,7 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.ZonedDateTime;
+
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -12,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import gui.Combo;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
 import logica.model.Estado;
@@ -41,15 +46,13 @@ public class FrmTarea extends JFrame implements ActionListener {
 	private JLabel LblHorasReales;
 	private JLabel LblIdEmpleado;
 	private JLabel LblEstado;
-	private JLabel LblIdProyecto;
 	
 	private JTextField TxtTitulo;
 	private JTextArea TxtDescripcion;
 	private JTextField TxtHorasEstimadas;
 	private JTextField TxtHorasReales;
-	private JTextField TxtIdEmpleado;
-	private JTextField TxtEstado;
-	private JTextField TxtIdProyecto;
+	private JComboBox ComboEmpleado;
+	private JComboBox ComboEstado;
 	
 	private JButton BtnGuardar;
 	private FrmListadoTareas frm;
@@ -68,7 +71,12 @@ public class FrmTarea extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
 		// setear panel de la ventana
-		this.setContentPane(GetPanelPrincipal());
+		try {
+			this.setContentPane(GetPanelPrincipal());
+		} catch (ServicioException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "FrmTarea",
+			        JOptionPane.ERROR_MESSAGE);
+		}
 
 		// compacta las componentes de la ventana
 		this.pack();
@@ -92,16 +100,15 @@ public class FrmTarea extends JFrame implements ActionListener {
 			TxtDescripcion.setText(tarea.getDescripcion());
 			TxtHorasEstimadas.setText(String.valueOf(tarea.getHorasEstimadas()));
 			TxtHorasReales.setText(String.valueOf(tarea.getHorasReales()));
-			TxtIdEmpleado.setText(String.valueOf(tarea.getEmpleado().getDni()));
-			TxtEstado.setText(tarea.getEstado().stringifyEstado(tarea));
-			TxtIdProyecto.setText(String.valueOf(tarea.getProyecto().getId()));
+			ComboEmpleado.setSelectedItem(tarea.getEmpleado().getDni());
+			ComboEstado.setSelectedItem(tarea.getEstado().stringifyEstado(tarea.getEstado()).toUpperCase());
 		} catch (ServicioException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Tarea",
 			        JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
-	private JPanel GetPanelPrincipal() {
+	private JPanel GetPanelPrincipal() throws ServicioException {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		
@@ -137,20 +144,14 @@ public class FrmTarea extends JFrame implements ActionListener {
 		LblIdEmpleado = new JLabel("Id Empleado");
 		panelCampos.add(LblIdEmpleado);
 
-		TxtIdEmpleado = new JTextField("", 20);
-		panelCampos.add(TxtIdEmpleado);
-		
-		LblIdProyecto = new JLabel("Id Proyecto");
-		panelCampos.add(LblIdProyecto);
-
-		TxtIdProyecto = new JTextField("", 20);
-		panelCampos.add(TxtIdProyecto);
+		ComboEmpleado = Combo.getComboEmpleadosDelProyecto(empleadoService.listar(), frm.getIdProyecto());
+		panelCampos.add(ComboEmpleado);
 		
 		LblEstado = new JLabel("Estado");
 		panelCampos.add(LblEstado);
 		
-		TxtEstado = new JTextField("", 20);
-		panelCampos.add(TxtEstado);
+		ComboEstado = Combo.getComboEstados();
+		panelCampos.add(ComboEstado);
 
 		panel.add(panelCampos, BorderLayout.CENTER);
 		
@@ -167,7 +168,7 @@ public class FrmTarea extends JFrame implements ActionListener {
 		TxtDescripcion.getText().isEmpty() || 
 		TxtHorasEstimadas.getText().isEmpty() || 
 		TxtHorasReales.getText().isEmpty() ||
-		TxtIdEmpleado.getText().isEmpty()) {
+		ComboEmpleado.getSelectedItem() == null) {
 			JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacios. Vuelva a intentar nuevamente", "Tarea",
 			        JOptionPane.ERROR_MESSAGE);
 		} else {
@@ -181,35 +182,30 @@ public class FrmTarea extends JFrame implements ActionListener {
 				tarea.setHorasReales(Integer.parseInt(TxtHorasReales.getText()));
 
 				//Empleado
-				tarea.asignarEmpleado(empleadoService.getById(Long.parseLong(TxtIdEmpleado.getText())));
+				tarea.asignarEmpleado(empleadoService.getById((Long)ComboEmpleado.getSelectedItem()));
 				
 				//Proyecto
-				//Deberia ser un dropdown
-				tarea.setProyecto(proyectoService.getById(Long.parseLong(TxtIdProyecto.getText())));
+				tarea.setProyecto(proyectoService.getById(frm.getIdProyecto()));
 				
 				//Estado
-				parseEstado(TxtEstado.getText());
-				Estado estado = tarea.getEstado(); 
+				parseEstado((String)ComboEstado.getSelectedItem());
+				Estado estado = tarea.getEstado();
 				
-				if(estado == null || estado.estaIniciado() != iniciado || 
-				estado.estaEnCurso() != enCurso || 
-				estado.estaFinalizado() != finalizado) {
-					long newTareaId = tareaService.getLastId() + 1;//obtengo ultimo id de tarea y le sumo uno para hacer la FK de ESTADO
-					
-					//El estado deberia ser un dropdown(iniciado,encurso..) y tener/guardar Timestamp.
-					if(idTarea == -1) {
-						estadoService.crear(new Estado(tarea.getEmpleado(),iniciado,enCurso,finalizado,newTareaId));//Creo estado.	
-					} else {
-						estadoService.crear(new Estado(tarea.getEmpleado(),iniciado,enCurso,finalizado,tarea.getId()));//Creo estado.
-					}					
-					tarea.cambiarEstadoA(estadoService.listar().get(0));//Asigno el ultimo estado creado recien
+				//si el estado cambio o nunca existio creo uno nuevo.
+				if(estado == null || estado.estaIniciado() != iniciado || estado.estaEnCurso() != enCurso || estado.estaFinalizado() != finalizado) {
+					estadoService.crear(new Estado(tarea.getEmpleado(),iniciado,enCurso,finalizado,idTarea,ZonedDateTime.now()));
+					estado = estadoService.listar().get(0);
 				}
 				//FIN de asignacion de campos nuevos a la tarea
 				
 				if(idTarea == -1) {
 					tareaService.crear(tarea);
-				} else {
+					estado.setIdTarea(tareaService.getLastId());
+					estadoService.modificar(estado);
+				} else {					
 					tarea.setId(idTarea);
+					estado.setIdTarea(idTarea);
+					estadoService.modificar(estado);
 					tareaService.modificar(tarea);
 				}
 				frm.cargarTabla();
@@ -224,6 +220,7 @@ public class FrmTarea extends JFrame implements ActionListener {
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(this, "Algo salio mal: " + ex.getMessage(), "FrmTarea",
 				        JOptionPane.ERROR_MESSAGE);
+				ex.printStackTrace();
 			}
 		}
 		

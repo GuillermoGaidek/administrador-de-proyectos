@@ -4,13 +4,17 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import logica.excepciones.DAOException;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
 import logica.model.Estado;
 import logica.model.Proyecto;
+import logica.model.Tarea;
 import logica.service.GenericService;
 import persistencia.jdbc.DBManager;
 
@@ -21,10 +25,10 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 	@Override
 	public void crear(Estado estado) throws DAOException {
 		
-		String sql = "INSERT INTO ESTADO (ID_EMPLEADO,INICIADO,EN_CURSO,FINALIZADO,ID_TAREA) VALUES " +
-						"(" + estado.getModificadoPor().getDni() + ", " + estado.estaIniciado() + ", " +
+		String sql = "INSERT INTO ESTADO (ID_EMPLEADO,INICIADO,EN_CURSO,FINALIZADO,ID_TAREA,FECHA_MODIFICACION) VALUES " +
+						"(" + estado.getResponsable().getDni() + ", " + estado.estaIniciado() + ", " +
 						estado.estaEnCurso() + ", " + estado.estaFinalizado() + ", " +
-						estado.getIdTarea() + ")";
+						estado.getIdTarea() + ", '" + estado.getFechaModificacion() + "')";
 		
 		Connection c = DBManager.connect();
 		
@@ -73,8 +77,33 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 	}
 
 	@Override
-	public void modificar(Estado estado){
-		//No se deberia poder modificar los estados ya que son como un historial}
+	public void modificar(Estado estado) throws DAOException {
+		
+		String sql = "UPDATE ESTADO SET " + "ID_EMPLEADO='" + estado.getResponsable().getDni() + "',INICIADO='" + 
+					estado.estaIniciado() + "',EN_CURSO=" + estado.estaEnCurso() + 
+					",FINALIZADO=" + estado.estaFinalizado() + ",ID_TAREA=" + estado.getIdTarea() +
+					",FECHA_MODIFICACION='" + estado.getFechaModificacion() + "' WHERE ID=" + estado.getId();
+		
+		Connection c = DBManager.connect();
+		try {
+			Statement s = c.createStatement();
+			s.executeUpdate(sql);
+			c.commit();
+		} catch (SQLException e) {
+			try {
+				c.rollback();
+				throw new DAOException("Error al modificar registro de la BD, rollback realizado", e);
+			} catch (SQLException e1) {
+				throw new DAOException("Error al modificar registro de la BD, rollback no realizado", e1);
+			}
+		} finally {
+			try {
+				DBManager.close();
+			} catch (SQLException e) {
+				throw new DAOException("Error al cerrar la conexion de la BD", e);
+			}
+		}
+		
 	}
 
 	@Override
@@ -87,9 +116,12 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 			ResultSet rs = s.executeQuery(sql);
 			
 			while (rs.next()) {
+				ZonedDateTime fechaModificacion = ZonedDateTime.ofInstant(rs.getTimestamp("FECHA_MODIFICACION").toInstant(),
+																		  ZoneId.systemDefault());
+				
 				Estado estado = new Estado(rs.getLong("ID"),empleadoService.getById(rs.getLong("ID_EMPLEADO")),
-											rs.getBoolean("INICIADO"),rs.getBoolean("EN_CURSO"),
-											rs.getBoolean("FINALIZADO"),rs.getLong("ID_TAREA"));
+											rs.getBoolean("INICIADO"),rs.getBoolean("EN_CURSO"),rs.getBoolean("FINALIZADO"),
+											rs.getLong("ID_TAREA"),fechaModificacion);
 				lista.add(estado);
 			}
 		} catch (SQLException e) {
@@ -112,7 +144,41 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 	}
 	
 	@Override
-	public List<Estado> listarById(long id) {return new ArrayList();}
+	public List<Estado> listarById(long idTarea) throws DAOException {
+		List<Estado> lista = new ArrayList<Estado>();
+		String sql = "SELECT * FROM ESTADO WHERE ID_TAREA =" + idTarea;
+		Connection c = DBManager.connect();
+		try {
+			Statement s = c.createStatement();
+			ResultSet rs = s.executeQuery(sql);
+			
+			while (rs.next()) {
+				ZonedDateTime fechaModificacion = ZonedDateTime.ofInstant(rs.getTimestamp("FECHA_MODIFICACION").toInstant(),
+																		  ZoneId.systemDefault());
+				
+				Estado estado = new Estado(rs.getLong("ID"),empleadoService.getById(rs.getLong("ID_EMPLEADO")),
+											rs.getBoolean("INICIADO"),rs.getBoolean("EN_CURSO"),rs.getBoolean("FINALIZADO"),
+											rs.getLong("ID_TAREA"),fechaModificacion);
+				lista.add(estado);
+			}
+		} catch (SQLException e) {
+			try {
+				c.rollback();
+				throw new DAOException("Error al obtener datos de la BD, rollback realizado", e);
+			} catch (SQLException e1) {
+				throw new DAOException("Error al obtener datos de la BD, rollback no realizado", e1);
+			}
+		} catch (ServicioException se) {
+			throw new DAOException("Error en el servicio al obtener lista de Estados de la BD", se);
+		} finally {
+			try {
+				DBManager.close();
+			} catch (SQLException e) {
+				throw new DAOException("Error al cerrar la conexion de la BD", e);
+			}
+		}
+		return lista;
+	}
 
 	@Override
 	public Estado getById(long id) throws DAOException {
@@ -124,9 +190,13 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 			ResultSet rs = s.executeQuery(sql);
 
 			if (rs.next()) {
+				
+				ZonedDateTime fechaModificacion = ZonedDateTime.ofInstant(rs.getTimestamp("FECHA_MODIFICACION").toInstant(),
+						  ZoneId.systemDefault());
+				
 				estado = new Estado(rs.getLong("ID"),empleadoService.getById(rs.getLong("ID_EMPLEADO")),
 						rs.getBoolean("INICIADO"),rs.getBoolean("EN_CURSO"),rs.getBoolean("FINALIZADO"),
-						rs.getLong("ID_TAREA"));
+						rs.getLong("ID_TAREA"),fechaModificacion);
 			}
 
 		} catch (SQLException e) {
