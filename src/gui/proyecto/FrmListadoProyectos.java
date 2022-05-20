@@ -20,12 +20,15 @@ import gui.empleado.FrmListadoEmpleados;
 import gui.tarea.FrmListadoTareas;
 import gui.tarea.FrmTarea;
 import gui.tarea.TareaTableModel;
+import logica.excepciones.EmpleadoYaAsignadoException;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
+import logica.model.Estado;
 import logica.model.Proyecto;
 import logica.model.Tarea;
 import logica.service.GenericService;
 import persistencia.dao.EmpleadoDAOH2Impl;
+import persistencia.dao.EstadoDAOH2Impl;
 import persistencia.dao.ProyectoDAOH2Impl;
 import persistencia.dao.TareaDAOH2Impl;
 
@@ -33,6 +36,9 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 	
 	GenericService<Proyecto> proyectoService = new GenericService<Proyecto>(new ProyectoDAOH2Impl());
 	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
+	GenericService<Tarea> tareaService = new GenericService<Tarea>(new TareaDAOH2Impl());
+	GenericService<Estado> estadoService = new GenericService<Estado>(new EstadoDAOH2Impl());
+	
 	private JTable tabla;
 	private ProyectoTableModel modelo;
 	private JScrollPane scrollPaneParaTabla;
@@ -130,15 +136,17 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 				if(this.tabla.getSelectedRow() != -1) {
 					fila = this.tabla.getSelectedRow();
 					long id = (long)this.tabla.getValueAt(fila, 0);
-					Proyecto p = new Proyecto();
-					p.setId(id);
-					proyectoService.borrar(p);
+					Proyecto p = proyectoService.getById(id);
+					borrarProyectoEnCascada(p);
 					cargarTabla();		
 				} else {
 					JOptionPane.showMessageDialog(this, "No selecciono ningun proyecto", "Borrar",
 					        JOptionPane.ERROR_MESSAGE);
 				}
-			}catch(ServicioException ex) {
+			} catch(EmpleadoYaAsignadoException ex) {
+				JOptionPane.showMessageDialog(this, ex.getMessage(),
+						"Borrar",JOptionPane.ERROR_MESSAGE);
+			} catch(ServicioException ex) {
 				JOptionPane.showMessageDialog(this, ex.getMessage(),
 						"Borrar",JOptionPane.ERROR_MESSAGE);
 			}
@@ -156,5 +164,21 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 			}
 		}
 	
+	private void borrarProyectoEnCascada(Proyecto proy) throws ServicioException, EmpleadoYaAsignadoException {
+		List<Tarea> listaTareas = tareaService.listarById(proy.getId());
+		for(Tarea t : listaTareas) {
+			List<Estado> listaEstados = estadoService.listarById(t.getId());
+			for(Estado e : listaEstados) {
+				estadoService.borrar(e);
+			}
+			tareaService.borrar(t);
+		}
+		List<Empleado> listaEmpleados = empleadoService.listarById(proy.getId());
+		for(Empleado emp: listaEmpleados) {
+			emp.setProyecto(null);
+		}
+		
+		proyectoService.borrar(proy);
+	}
 	
 }

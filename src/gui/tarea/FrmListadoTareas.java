@@ -23,7 +23,7 @@ import javax.swing.border.TitledBorder;
 import com.sun.javafx.tk.Toolkit;
 
 import gui.BotoneraCrud;
-import gui.Estado.ListadoEstados;
+import gui.estado.ListadoEstados;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
 import logica.model.Estado;
@@ -37,6 +37,8 @@ public class FrmListadoTareas implements ActionListener {
 	
 	GenericService<Tarea> tareaService = new GenericService<Tarea>(new TareaDAOH2Impl());
 	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
+	GenericService<Estado> estadoService = new GenericService<Estado>(new EstadoDAOH2Impl());
+	
 	private JTable tabla;
 	private TareaTableModel modelo;
 	private JScrollPane scrollPaneParaTabla;
@@ -107,9 +109,8 @@ public class FrmListadoTareas implements ActionListener {
 				if(this.tabla.getSelectedRow() != -1) {
 					int fila = this.tabla.getSelectedRow();
 					long id = (long)this.tabla.getValueAt(fila, 0);
-					Tarea t = new Tarea();
-					t.setId(id);
-					tareaService.borrar(t);
+					Tarea t = tareaService.getById(id);
+					borrarTareasEnCascada(t);	
 					cargarTabla();		
 				} else {
 					JOptionPane.showMessageDialog(new JFrame(), "No selecciono ninguna tarea", "Borrar",
@@ -129,6 +130,14 @@ public class FrmListadoTareas implements ActionListener {
 						"Historial Estados",JOptionPane.ERROR_MESSAGE);
 			}
 		}
+	}
+	
+	private void borrarTareasEnCascada(Tarea t) throws ServicioException {
+		List<Estado> listaEstados = estadoService.listarById(t.getId());
+		for(Estado e : listaEstados) {
+			estadoService.borrar(e);
+		}
+		tareaService.borrar(t);
 	}
 	
 }

@@ -25,8 +25,10 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 	@Override
 	public void crear(Estado estado) throws DAOException {
 		
+		Object dniResponsable = estado.getResponsable() == null ? null : estado.getResponsable().getDni();
+		
 		String sql = "INSERT INTO ESTADO (ID_EMPLEADO,INICIADO,EN_CURSO,FINALIZADO,ID_TAREA,FECHA_MODIFICACION) VALUES " +
-						"(" + estado.getResponsable().getDni() + ", " + estado.estaIniciado() + ", " +
+						"(" + dniResponsable + ", " + estado.estaIniciado() + ", " +
 						estado.estaEnCurso() + ", " + estado.estaFinalizado() + ", " +
 						estado.getIdTarea() + ", '" + estado.getFechaModificacion() + "')";
 		
@@ -79,7 +81,9 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 	@Override
 	public void modificar(Estado estado) throws DAOException {
 		
-		String sql = "UPDATE ESTADO SET " + "ID_EMPLEADO='" + estado.getResponsable().getDni() + "',INICIADO='" + 
+		Object dniResponsable = estado.getResponsable() == null ? null : estado.getResponsable().getDni();
+		
+		String sql = "UPDATE ESTADO SET " + "ID_EMPLEADO='" + dniResponsable + "',INICIADO='" + 
 					estado.estaIniciado() + "',EN_CURSO=" + estado.estaEnCurso() + 
 					",FINALIZADO=" + estado.estaFinalizado() + ",ID_TAREA=" + estado.getIdTarea() +
 					",FECHA_MODIFICACION='" + estado.getFechaModificacion() + "' WHERE ID=" + estado.getId();
@@ -119,7 +123,8 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 				ZonedDateTime fechaModificacion = ZonedDateTime.ofInstant(rs.getTimestamp("FECHA_MODIFICACION").toInstant(),
 																		  ZoneId.systemDefault());
 				
-				Estado estado = new Estado(rs.getLong("ID"),empleadoService.getById(rs.getLong("ID_EMPLEADO")),
+				Empleado empleado = rs.getLong("ID_EMPLEADO") == 0 ? null : empleadoService.getById(rs.getLong("ID_EMPLEADO"));
+				Estado estado = new Estado(rs.getLong("ID"),empleado,
 											rs.getBoolean("INICIADO"),rs.getBoolean("EN_CURSO"),rs.getBoolean("FINALIZADO"),
 											rs.getLong("ID_TAREA"),fechaModificacion);
 				lista.add(estado);
@@ -155,8 +160,8 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 			while (rs.next()) {
 				ZonedDateTime fechaModificacion = ZonedDateTime.ofInstant(rs.getTimestamp("FECHA_MODIFICACION").toInstant(),
 																		  ZoneId.systemDefault());
-				
-				Estado estado = new Estado(rs.getLong("ID"),empleadoService.getById(rs.getLong("ID_EMPLEADO")),
+				Empleado empleado = rs.getLong("ID_EMPLEADO") == 0 ? null : empleadoService.getById(rs.getLong("ID_EMPLEADO"));
+				Estado estado = new Estado(rs.getLong("ID"),empleado,
 											rs.getBoolean("INICIADO"),rs.getBoolean("EN_CURSO"),rs.getBoolean("FINALIZADO"),
 											rs.getLong("ID_TAREA"),fechaModificacion);
 				lista.add(estado);
@@ -193,8 +198,8 @@ public class EstadoDAOH2Impl implements DAO<Estado> {
 				
 				ZonedDateTime fechaModificacion = ZonedDateTime.ofInstant(rs.getTimestamp("FECHA_MODIFICACION").toInstant(),
 						  ZoneId.systemDefault());
-				
-				estado = new Estado(rs.getLong("ID"),empleadoService.getById(rs.getLong("ID_EMPLEADO")),
+				Empleado empleado = rs.getLong("ID_EMPLEADO") == 0 ? null : empleadoService.getById(rs.getLong("ID_EMPLEADO"));
+				estado = new Estado(rs.getLong("ID"),empleado,
 						rs.getBoolean("INICIADO"),rs.getBoolean("EN_CURSO"),rs.getBoolean("FINALIZADO"),
 						rs.getLong("ID_TAREA"),fechaModificacion);
 			}

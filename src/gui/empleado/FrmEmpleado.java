@@ -83,7 +83,7 @@ public class FrmEmpleado extends JFrame implements ActionListener {
 			TxtDni.setText(String.valueOf(empleado.getDni()));
 			TxtCostoPorHora.setText(String.valueOf(empleado.getCostoPorHora()));
 			TxtLibre.setText(empleado.estaLibre()? "SI": "NO");
-			TxtIdProyecto.setText(empleado.getProyecto().getTitulo());
+			TxtIdProyecto.setText(empleado.getProyecto() == null? "-" : empleado.getProyecto().getTitulo());
 			
 		} catch (ServicioException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Empleado",

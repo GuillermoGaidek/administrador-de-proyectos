@@ -34,7 +34,7 @@ public class Combo{
 	public static Object[] filtrarEmpleadosLibres(List<Empleado> empleados,Long idProyecto) {
 		List<Long> empleadosFiltrados = new ArrayList<Long>();
 		if (empleados.isEmpty()) {
-			empleadosFiltrados.add((long) 0);
+			empleadosFiltrados.add(null);
 			return empleadosFiltrados.toArray();
 		}
 		for(Empleado emp : empleados) {
@@ -42,7 +42,7 @@ public class Combo{
 				empleadosFiltrados.add((long)emp.getDni());
 			}
 		}
-		if (empleadosFiltrados.isEmpty()) empleadosFiltrados.add((long) 0);
+		if (empleadosFiltrados.isEmpty()) empleadosFiltrados.add(null);
 		
 		return empleadosFiltrados.toArray();
 	}
@@ -50,7 +50,7 @@ public class Combo{
 	private static Object[] filtrarEmpleadosProyecto(List<Empleado> empleados,Long idProyecto) {
 		List<Long> empleadosFiltrados = new ArrayList<Long>();
 		if (empleados.isEmpty()) {
-			empleadosFiltrados.add((long) 0);
+			empleadosFiltrados.add(null);
 			return empleadosFiltrados.toArray();
 		} 
 		for(Empleado emp : empleados) {
@@ -58,7 +58,7 @@ public class Combo{
 				empleadosFiltrados.add((long)emp.getDni());
 			}
 		}
-		if (empleadosFiltrados.isEmpty()) empleadosFiltrados.add((long) 0);
+		if (empleadosFiltrados.isEmpty()) empleadosFiltrados.add(null);
 		return empleadosFiltrados.toArray();
 	}
 	

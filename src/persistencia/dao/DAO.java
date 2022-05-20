@@ -3,6 +3,7 @@ package persistencia.dao;
 import java.util.List;
 
 import logica.excepciones.DAOException;
+import logica.excepciones.EmpleadoYaAsignadoException;
 import logica.model.Tarea;
 
 public interface DAO<T> {

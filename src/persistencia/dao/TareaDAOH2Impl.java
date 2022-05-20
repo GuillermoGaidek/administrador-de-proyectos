@@ -116,7 +116,6 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 			while (rs.next()) {
 				
 				Empleado empleado = empleadoService.getById(rs.getLong("ID_EMPLEADO"));
-				empleado.setLibre(true);
 				
 				Estado estado = estadoService.getById(rs.getLong("ID_ESTADO"));
 				
@@ -158,7 +157,6 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 			while (rs.next()) {
 				
 				Empleado empleado = empleadoService.getById(rs.getLong("ID_EMPLEADO"));
-				empleado.setLibre(true);
 				
 				Estado estado = estadoService.getById(rs.getLong("ID_ESTADO"));
 				
@@ -190,7 +188,7 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 
 	@Override
 	public Tarea getById(long id) throws DAOException {
-		Tarea tarea = new Tarea();
+		Tarea tarea = null;
 		String sql = "SELECT T.*, E3.ID AS ID_ESTADO FROM TAREA T LEFT JOIN (SELECT E1.* FROM ESTADO E1 INNER JOIN  (SELECT MAX(E0.ID) AS ID FROM ESTADO E0 GROUP BY E0.ID_TAREA) E2 ON E1.ID = E2.ID) E3 ON T.ID = E3.ID_TAREA WHERE T.ID = " + id + "ORDER BY T.ID;";
 		Connection c = DBManager.connect();
 		try {
@@ -200,7 +198,6 @@ public class TareaDAOH2Impl implements DAO<Tarea> {
 			if (rs.next()) {
 				
 				Empleado empleado = empleadoService.getById(rs.getLong("ID_EMPLEADO"));
-				empleado.setLibre(true);
 				
 				Estado estado = estadoService.getById(rs.getLong("ID_ESTADO"));
 				

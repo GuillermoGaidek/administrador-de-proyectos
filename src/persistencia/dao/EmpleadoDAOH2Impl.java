@@ -10,6 +10,7 @@ import java.util.List;
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 
 import logica.excepciones.DAOException;
+import logica.excepciones.EmpleadoYaAsignadoException;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
 import logica.model.Estado;
@@ -130,12 +131,14 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 		} catch (SQLException e) {
 			try {
 				c.rollback();
-				throw new DAOException("Error al obtener lista de tareas de la BD, rollback realizado", e);
+				throw new DAOException("Error al obtener lista de empleados de la BD, rollback realizado", e);
 			} catch (SQLException e1) {
-				throw new DAOException("Error al obtener lista de tareas de la BD, rollback no realizado", e1);
+				throw new DAOException("Error al obtener lista de empleados de la BD, rollback no realizado", e1);
 			}
 		} catch (ServicioException se) {
-			throw new DAOException("Error en el servicio al obtener lista de Tareas de la BD", se);
+			throw new DAOException("Error en el servicio al obtener lista de empleados de la BD", se);
+		} catch (EmpleadoYaAsignadoException empYaAsigEx) {
+			throw new DAOException("Empleado ya asignado.", empYaAsigEx);
 		} finally {
 			try {
 				DBManager.close();
@@ -163,12 +166,14 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 		} catch (SQLException e) {
 			try {
 				c.rollback();
-				throw new DAOException("Error al obtener lista de tareas de la BD, rollback realizado", e);
+				throw new DAOException("Error al obtener lista de empleados de la BD, rollback realizado", e);
 			} catch (SQLException e1) {
-				throw new DAOException("Error al obtener lista de tareas de la BD, rollback no realizado", e1);
+				throw new DAOException("Error al obtener lista de empleados de la BD, rollback no realizado", e1);
 			}
 		} catch (ServicioException se) {
-			throw new DAOException("Error en el servicio al obtener lista de Tareas de la BD", se);
+			throw new DAOException("Error en el servicio al obtener lista de empleados de la BD", se);
+		} catch (EmpleadoYaAsignadoException empYaAsigEx) {
+			throw new DAOException("Empleado ya asignado.", empYaAsigEx);
 		} finally {
 			try {
 				DBManager.close();
@@ -189,7 +194,7 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 			ResultSet rs = s.executeQuery(sql);
 
 			if (rs.next()) {
-				Proyecto proyecto = proyectoService.getById(rs.getLong("ID_PROYECTO"));
+				Proyecto proyecto = rs.getLong("ID_PROYECTO") == 0 ? null : proyectoService.getById(rs.getLong("ID_PROYECTO"));
 				empleado = new Empleado(rs.getLong("DNI"), rs.getInt("COSTO_POR_HORA"),proyecto);
 			}
 
@@ -201,7 +206,9 @@ public class EmpleadoDAOH2Impl implements DAO<Empleado> {
 				throw new DAOException("Error al obtener registro de la BD, rollback no realizado", e1);
 			}
 		} catch (ServicioException se) {
-			throw new DAOException("Error en el servicio al obtener lista de Tareas de la BD", se);
+			throw new DAOException("Error en el servicio al obtener lista de empleados de la BD", se);
+		} catch (EmpleadoYaAsignadoException empYaAsigEx) {
+			throw new DAOException("Empleado ya asignado.", empYaAsigEx);
 		} finally {
 			try {
 				DBManager.close();

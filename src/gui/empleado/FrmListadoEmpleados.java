@@ -20,6 +20,7 @@ import javax.swing.border.TitledBorder;
 import gui.BotoneraCrud;
 import gui.tarea.FrmTarea;
 import gui.tarea.TareaTableModel;
+import logica.excepciones.EmpleadoYaAsignadoException;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
 import logica.model.Tarea;
@@ -122,15 +123,18 @@ public class FrmListadoEmpleados extends JFrame implements ActionListener{
 				if(this.tabla.getSelectedRow() != -1) {
 					int fila = this.tabla.getSelectedRow();
 					long dni = (long)this.tabla.getValueAt(fila, 0);
-					Empleado emp = new Empleado();
-					emp.setDni(dni);
+					Empleado emp = empleadoService.getById(dni);
+					if(emp.getProyecto() != null) throw new EmpleadoYaAsignadoException("El empleado esta asignado a un proyecto. No se puede borrar.");
 					empleadoService.borrar(emp);
 					cargarTabla();		
 				} else {
 					JOptionPane.showMessageDialog(this, "No selecciono ningun empleado", "Borrar",
 					        JOptionPane.ERROR_MESSAGE);
 				}
-			}catch(ServicioException ex) {
+			} catch(ServicioException ex) {
+				JOptionPane.showMessageDialog(this, ex.getMessage(),
+						"Borrar",JOptionPane.ERROR_MESSAGE);
+			} catch(EmpleadoYaAsignadoException ex) {
 				JOptionPane.showMessageDialog(this, ex.getMessage(),
 						"Borrar",JOptionPane.ERROR_MESSAGE);
 			}

@@ -1,30 +1,6 @@
-4)Mostrar el historial de estados de las tareas.. 
 
-5)Error de empleado ya agregado que onda?
+-----------------------------------JIRAS-------------------------------------
 
-6)Ver todas las relaciones de empleado <-> proyecto posibles.
-Ver que pasa si borro uno con proyecto asignado o tarea..
-No se puede cambiar empleado de proyecto si tiene tarea asignada, al igual que no se puede
-cambiar tarea de proyecto si tiene empleado asignado de ese proyecto.
-
-7)Ver logica al borrar proyecto, que pida confirmacion si tiene tareas en curso y 
-empelados queden libres y tareas borradas y estados.
-Que onda con los IDs al borrar un proyecto o tarea,etc?
-
-8)Manejo de errores poco descriptivo y mal nombre de parametros.
-Manejar bien los errores tipo LABO2.
-
-9)Q&A de campos null y refactorizar para no repetir codigo.
-
-
-
-
-
-
-
-
-
-------------------------------------------------------------------------
 1)EL ESTADO NO LO DEBERIA PODER CAMBIAR. QUE SEA UN Jlbl.
 
 2)Empleado puede tener mas de una tarea. Cambiar logica de ocupado dependeinedo el proyecto y no la tarea.
@@ -72,3 +48,18 @@ Entonces el error va a estar cuadno este mostrando las tareas que vo a tener
 el estado en null y por eso el NPExecp.
 
 14)Agregar Timestamp para la clase Estado y en BD.
+
+15)Mostrar el historial de estados de las tareas.. 
+
+16)Si se asigna empleado ya existente al proyecto tira excepcion (desde el empleado). 
+Si el proyecto no esta creado la asignacion se hace en memoria primero 
+y la validacion va a estar en frmProyecto 
+
+17)Si se borra proyecto sus empleados quedan libres.
+
+18)No se puede borrar un empleado con proyecto o tarea asignado
+No se puede desasignar empleado de proyecto si tiene tarea asignada
+
+19)Al borrar proyecto los empelados quedan libres y tareas y estados borradas.
+
+20)Si borro empleado y tenia estados asignados me van a aparecer con un "-" en responsable

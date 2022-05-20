@@ -132,7 +132,7 @@ public class ProyectoDAOH2Impl implements DAO<Proyecto> {
 
 	@Override
 	public Proyecto getById(long id) throws DAOException {
-		Proyecto proyecto = new Proyecto();
+		Proyecto proyecto = null;
 		String sql = "SELECT * FROM PROYECTO WHERE ID=" + id;
 		Connection c = DBManager.connect();
 		try {

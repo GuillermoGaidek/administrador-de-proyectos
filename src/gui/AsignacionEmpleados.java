@@ -20,19 +20,24 @@ import javax.swing.SwingConstants;
 
 import gui.proyecto.FrmListadoProyectos;
 import gui.proyecto.FrmProyecto;
+import logica.excepciones.EmpleadoConTareaException;
+import logica.excepciones.EmpleadoYaAsignadoException;
 import logica.excepciones.ServicioException;
 import logica.model.Empleado;
 import logica.model.Estado;
 import logica.model.Proyecto;
+import logica.model.Tarea;
 import logica.service.GenericService;
 import persistencia.dao.EmpleadoDAOH2Impl;
 import persistencia.dao.EstadoDAOH2Impl;
 import persistencia.dao.ProyectoDAOH2Impl;
+import persistencia.dao.TareaDAOH2Impl;
 
 public class AsignacionEmpleados extends JFrame implements ActionListener{
 	
 	GenericService<Empleado> empleadoService = new GenericService<Empleado>(new EmpleadoDAOH2Impl());
 	GenericService<Proyecto> proyectoService = new GenericService<Proyecto>(new ProyectoDAOH2Impl());
+	GenericService<Tarea> tareaService = new GenericService<Tarea>(new TareaDAOH2Impl());
 	
 	private JLabel LblTituloVentana;	
 	private JLabel LblEmpleado;
@@ -118,31 +123,40 @@ public class AsignacionEmpleados extends JFrame implements ActionListener{
 					} else {
 						frm.cargarTabla(emp,!asignar);
 					}
-					
 				} else { // Si ya existe modifico en la BD directamente
 					Proyecto proy = proyectoService.getById(idProyecto);
 					
 					if(e.getSource() == BtnAsignar) {
 						emp.setProyecto(proy);
 					} else {
+						if(empleadoTieneTareas(emp)) throw new EmpleadoConTareaException("No se puede desasignar empleado con tareas asignadas.");
 						emp.setProyecto(null);
 					}
-					
 					empleadoService.modificar(emp);
 					frm.cargarTabla();
 				}
-				
 				this.setVisible(false);
 				dispose();
 			} catch (ServicioException ex) {
 				JOptionPane.showMessageDialog(this, ex.getMessage(), "Asignacion de empleados",
 				        JOptionPane.ERROR_MESSAGE);
-			} catch (Exception ex) {
+			} catch (EmpleadoConTareaException ex) {
+				JOptionPane.showMessageDialog(this, ex.getMessage(), "Asignacion de empleados",
+				        JOptionPane.ERROR_MESSAGE);
+			}catch (Exception ex) {
 				JOptionPane.showMessageDialog(this, "Algo salio mal: " + ex.getMessage(), "Asignacion de empleados",
 				        JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		
+	}
+	
+	private boolean empleadoTieneTareas(Empleado emp) throws ServicioException {
+		List<Tarea> lista = tareaService.listarById(idProyecto);
+		for(Tarea t : lista) {
+			if(t.getEmpleado().equals(emp)) return true;
+		}
+		return false;
 	}
 	
 }

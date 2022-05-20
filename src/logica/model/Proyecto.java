@@ -74,7 +74,14 @@ public class Proyecto {
 		return "Proyecto [id=" + id + ", nombre=" + titulo + ", empleados=" + empleados + ", tareas=" + tareas + "]";
 	}
 	
-	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		Proyecto proy = (Proyecto)obj;
+		if (this.id == proy.id) return true;
+	    return false;
+	}
 
 	
 }
