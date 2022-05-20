@@ -156,7 +156,7 @@ public class FrmListadoProyectos extends JFrame implements ActionListener{
 				long id = (long)this.tabla.getValueAt(fila, 0);
 				new VerProyecto(id);
 			} else {
-				JOptionPane.showMessageDialog(this, "No selecciono ningun proyecto", "Ver Tareas",
+				JOptionPane.showMessageDialog(this, "No selecciono ningun proyecto", "Ver Proyecto",
 				        JOptionPane.ERROR_MESSAGE);
 			}
 		} else if(e.getSource() == botonPoolEmpleados) {
