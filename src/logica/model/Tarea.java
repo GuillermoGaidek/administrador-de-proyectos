@@ -13,7 +13,7 @@ public class Tarea {
 	private int horasEstimadas;
 	private int horasReales;
 	private Empleado empleado;
-	private Estado estado;//deberia ser lista de estados
+	private Estado estado;
 	private Proyecto proyecto;
 	
 	public Tarea() {}

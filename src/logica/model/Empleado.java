@@ -13,7 +13,6 @@ public class Empleado {
 	private long costoPorHora;
 	private boolean libre = true; //Se maneja automaticamente con setProyecto
 	private Proyecto proyecto = null;
-	//lista de tareas..
 	
 	public Empleado() {}
 	
